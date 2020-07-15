@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&display=swap");
+
+$dark-black: #121212;
+$light-black: #181818;
+$in-between: #1c1c1c;
+$lighter-black: #282828;
+$green-light-back: #1aa34a;
+$green-dark-back: #1db954;
+$menu-font: #b3b3b3;
+
+#profile-chip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $dark-black;
+  padding: 2px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+
+  &.active {
+    background-color: $lighter-black;
+  }
+
+  img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+
+  #chip-name {
+    font-size: 16px;
+    color: white;
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 700;
+    margin-left: 8px;
+  }
+
+  #menu-down-toggle {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+    margin-left: 8px;
+
+    &.down {
+      transform: rotate(180deg);
+    }
+
+    svg {
+      color: white;
+      transform: rotate(-90deg);
+    }
+  }
+
+  #drop-down-menu {
+    font-size: 16px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    right: 0;
+    top: 46px;
+    background-color: $lighter-black;
+    min-width: 100%;
+    height: 50px;
+    border-radius: 3px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.7);
+    transition: filter 150ms ease;
+
+    &:hover {
+      filter: brightness(115%);
+    }
+
+    span {
+      font-family: "Nunito Sans", sans-serif;
+      color: $menu-font;
+      padding: 3px 20px;
+    }
+  }
+}

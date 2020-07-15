@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&display=swap");
+
+$dark-black: #121212;
+$light-black: #181818;
+$in-between: #1c1c1c;
+$lighter-black: #282828;
+$green-light-back: #1aa34a;
+$green-dark-back: #1db954;
+
+#application-header {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  width: 100%;
+  padding: 14px 72px;
+  box-sizing: border-box;
+  z-index: 10;
+
+  &.filled {
+    background-color: $dark-black;
+  }
+
+  #button-container {
+    width: 80px;
+    display: flex;
+    justify-content: space-between;
+  }
+}

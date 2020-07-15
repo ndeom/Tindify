@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&display=swap");
+
+$dark-black: #121212;
+$light-black: #181818;
+$in-between: #1c1c1c;
+$lighter-black: #282828;
+$green-light-back: #1aa34a;
+$green-dark-back: #1db954;
+$another-black: #181818;
+$thumb-bar: #ffffff4d;
+
+#browse {
+  background-color: $in-between;
+  color: white;
+  padding-top: 60px;
+  /*display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  grid-template-rows: auto;
+  column-gap: 16px;
+  row-gap: 16px;*/
+
+  #categories {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 60px;
+  }
+}

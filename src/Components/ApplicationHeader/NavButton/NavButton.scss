@@ -1,0 +1,23 @@
+$dark-black: #121212;
+
+.nav-button {
+  width: 32px;
+  height: 32px;
+  background-color: $dark-black;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.forward {
+    transform: rotate(180deg);
+  }
+
+  svg {
+    color: white;
+    height: 24px;
+    width: 24px;
+  }
+}

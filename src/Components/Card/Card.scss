@@ -1,0 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&display=swap");
+
+$light-black: #181818;
+$lighter-black: #282828;
+$green-light-back: #1aa34a;
+$green-dark-back: #1db954;
+
+.card {
+  width: 300px;
+  height: 500px;
+  background-color: $lighter-black;
+  border-radius: 10px;
+}

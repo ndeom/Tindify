@@ -1,25 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext } from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
+import { RecoilRoot } from "recoil";
+import Login from "./Routes/Login/Login";
+import Browse from "./Routes/Browse/Browse";
+import Swipe from "./Routes/Swipe/Swipe";
+import ApplicationHeader from "./Components/ApplicationHeader/ApplicationHeader";
+import CategoryRoute from "./Routes/Category/CategoryRoute";
+import { userContext } from "./UserProvider";
+import "./App.scss";
 
 function App() {
+  const { userToken } = useContext(userContext);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Switch>
+      <Route exact path="/">
+        {userToken ? <Redirect to="/browse" /> : <Redirect to="/login" />}
+      </Route>
+      <Route path="/login">
+        <Login />
+      </Route>
+      <Route path="/browse">
+        <ApplicationHeader />
+        <Browse />
+      </Route>
+      <Route path="/:category/swipe/:playlist">
+        <ApplicationHeader />
+        <RecoilRoot>
+          <Swipe />
+        </RecoilRoot>
+      </Route>
+      <Route path="/:category">
+        <ApplicationHeader />
+        <CategoryRoute />
+      </Route>
+    </Switch>
   );
 }
 

@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&display=swap");
+
+$light-black: #181818;
+$lighter-black: #282828;
+$green-light-back: #1aa34a;
+$green-dark-back: #1db954;
+
+.playlist {
+  /*background-color: $lighter-black;*/
+  width: 200px;
+  min-height: 200px;
+  border-radius: 8px;
+  justify-self: center;
+  align-self: center;
+  margin: 12px;
+  position: relative;
+  cursor: pointer;
+
+  .gradient {
+    position: absolute;
+    background: linear-gradient(0deg, transparent, rgba(0, 0, 0, 0.4));
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+
+    .playlist-title {
+      color: white;
+      position: absolute;
+      padding: 1rem;
+      margin: 0;
+      font-family: "Nunito Sans", sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 1.3em;
+    }
+
+    .playlist-image {
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      transform: rotate(25deg) translate(18%, -2%);
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    }
+  }
+}

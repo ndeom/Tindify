@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&display=swap");
+
+$light-black: #181818;
+$lighter-black: #282828;
+$green-light-back: #1aa34a;
+$green-dark-back: #1db954;
+
+.route-header {
+  h1 {
+    margin: 0;
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 900;
+    font-size: 60px;
+    padding: 36px 72px 0 72px;
+  }
+}
