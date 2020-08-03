@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect, useContext } from "react";
+import { userContext } from "../../UserProvider";
 import { atom, useRecoilState } from "recoil";
 import Card from "../../Components/Card/Card";
 import { useSprings, animated, interpolate } from "react-spring";
 import { useDrag } from "react-use-gesture";
+
 import "./Deck.scss";
 
 const to = (i) => ({
@@ -21,7 +23,14 @@ export const trackColor = atom({
   default: ["#282828", "#282828"],
 });
 
-export default function Deck({ tracks }) {
+export default function Deck({
+  tracks,
+  noDeviceWarning,
+  setNoDeviceWarning,
+  noPreviewWarning,
+  setNoPreviewWarning,
+}) {
+  const { userInfo, spotify } = useContext(userContext);
   const [currentIndices, setCurrentIndices] = useState([0, 1]);
   const [color, setColor] = useRecoilState(trackColor);
   const [gone] = useState(() => new Set());
@@ -29,28 +38,107 @@ export default function Deck({ tracks }) {
     ...to(index),
     from: from(index),
   }));
+  const [previewAudio, setPreviewAudio] = useState(new Audio());
 
-  useEffect(() => {
-    console.log("tracks", tracks);
-    const firstCardPrimary = tracks.length
-      ? tracks[currentIndices[0]].primary_color || "#282828"
-      : "#282828";
-    const secondCardPrimary = tracks.length
-      ? tracks[currentIndices[1]].primary_color || "#282828"
-      : "#282828";
+  const secondToLastCard = currentIndices[1] === tracks.length - 1;
+  const lastCard = currentIndices[0] === tracks.length - 1;
+  const noCard = currentIndices.length === 0;
 
-    setColor([firstCardPrimary, secondCardPrimary]);
+  const handleLikeOrDislike = (direction) => {
+    set((i) => {
+      if (i === currentIndices[0])
+        return { x: (200 + window.innerWidth) * direction, rot: 5 * direction };
+      return;
+    });
 
-    // if (firstCardPrimary && secondCardPrimary) {
-    //   setColor([firstCardPrimary, secondCardPrimary]);
-    // }
-    // if (firstCardPrimary) {
-    //   setColor([firstCardPrimary, color[1]]);
-    // }
-    // if (secondCardPrimary) {
-    //   setColor([color[0], secondCardPrimary]);
-    // }
-  }, [currentIndices]);
+    //Ensure that audio stops when card is swiped
+    if (previewAudio.src && !previewAudio.paused) previewAudio.pause();
+    //setPreviewAudio(new Audio());
+
+    if (direction === 1) addToPlaylist();
+
+    handleIndexChange();
+  };
+
+  const addToPlaylist = async () => {
+    console.log("spotify: ", spotify);
+    //console.log("user ID: ", userInfo.id);
+    try {
+      const { items: userPlaylists } = await spotify.getUserPlaylists(
+        userInfo.id
+      );
+      const tindify = userPlaylists.filter(
+        (playlist) => playlist.name === "Tindify"
+      )[0];
+      let playlistId;
+      if (!tindify) {
+        const playlist = await spotify.createPlaylist(userInfo.id, {
+          name: "Tindify",
+        });
+        playlistId = playlist.id;
+      } else {
+        playlistId = tindify.id;
+      }
+      const currentTrackUri = tracks[currentIndices[0]].track.uri;
+      const updatedPlaylist = await spotify.addTracksToPlaylist(playlistId, [
+        currentTrackUri,
+      ]);
+      console.log("udpatedPlaylist: ", updatedPlaylist);
+    } catch (error) {
+      console.error("Error adding song to Tindify playlist!", error);
+    }
+  };
+
+  const handleIndexChange = () => {
+    removeNoPreviewWarning();
+    removeNoDeviceWarning();
+    setTimeout(() => {
+      if (lastCard) {
+        console.log("lastCard set indices");
+        setCurrentIndices([]);
+      } else if (secondToLastCard) {
+        console.log("second to last set indices");
+        setCurrentIndices([currentIndices[0] + 1]);
+      } else {
+        console.log("regular set indices");
+        setCurrentIndices([currentIndices[0] + 1, currentIndices[1] + 1]);
+      }
+
+      console.log(
+        "index changed at: ",
+        Date.now(),
+        "index is: ",
+        currentIndices[0]
+      );
+      gone.clear();
+    }, 200);
+  };
+
+  const removeNoPreviewWarning = () => {
+    if (noPreviewWarning) setNoPreviewWarning(false);
+  };
+
+  const removeNoDeviceWarning = () => {
+    if (noDeviceWarning) setNoDeviceWarning(false);
+  };
+
+  useLayoutEffect(() => {
+    //const lastCard = currentIndices[1] === tracks.length - 1;
+
+    if (noCard) {
+      setColor([]);
+    } else if (lastCard) {
+      const firstCardPrimary =
+        tracks[currentIndices[0]].primary_color || "#1DB954";
+      setColor([firstCardPrimary]);
+    } else {
+      const firstCardPrimary =
+        tracks[currentIndices[0]].primary_color || "#1DB954";
+      const secondCardPrimary =
+        tracks[currentIndices[1]].primary_color || "#1DB954";
+      setColor([firstCardPrimary, secondCardPrimary]);
+    }
+  }, [currentIndices, lastCard, noCard, setColor, tracks]);
 
   const bind = useDrag(
     ({
@@ -63,7 +151,7 @@ export default function Deck({ tracks }) {
     }) => {
       const exitVelocity = velocity > 0.2;
       const exitDistance = window.innerWidth * 0.25;
-      const flickDirection = xDir > 0 ? 1 : -1;
+      let flickDirection = xDir > 0 ? 1 : -1;
 
       //If mouse not pressed (let go) and exit velocity
       //has been reached, add to "gone" set and animate out
@@ -85,6 +173,7 @@ export default function Deck({ tracks }) {
           return;
         }
         const isGone = gone.has(index);
+
         const x = isGone
           ? (200 + window.innerWidth) * flickDirection
           : down
@@ -107,38 +196,90 @@ export default function Deck({ tracks }) {
       });
 
       if (!down && gone.size > 0) {
-        setTimeout(() => {
-          setCurrentIndices([currentIndices[0] + 1, currentIndices[1] + 1]);
-          gone.clear();
-        }, 100);
+        handleLikeOrDislike(flickDirection);
       }
     }
   );
 
-  return props.map(({ x, y, rot, scale }, index) => {
-    if (index === currentIndices[0] || index === currentIndices[1]) {
-      return (
-        <animated.div
-          key={index}
-          style={{
-            //Added to correct stacking order of cards
-            zIndex: 100 - index,
-            transform: interpolate(
-              [x, y],
-              (x, y) => `translate3d(${x}px,${y}px,0)`
-            ),
-          }}
-        >
-          <Card
-            track={tracks[index]}
-            i={index}
-            bind={bind}
-            styles={{ transform: interpolate([rot, scale], trans) }}
-          />
-        </animated.div>
-      );
-    } else {
-      return null;
-    }
-  });
+  if (lastCard) {
+    //console.log("LAST CARD RENDER");
+    return props.map(({ x, y, rot, scale }, index) => {
+      const track = tracks[index];
+      const zIndex = tracks.length - index;
+      if (index === currentIndices[0]) {
+        return (
+          <animated.div
+            className="deck-container"
+            key={index}
+            style={{
+              //Added to correct stacking order of cards
+              zIndex: zIndex,
+              transform: interpolate(
+                [x, y],
+                (x, y) => `translate3d(${x}px,${y}px,0)`
+              ),
+            }}
+          >
+            <Card
+              previewAudio={previewAudio}
+              setNoPreviewWarning={setNoPreviewWarning}
+              setNoDeviceWarning={setNoDeviceWarning}
+              currentIndex={currentIndices[0]}
+              gone={gone}
+              handleLikeOrDislike={handleLikeOrDislike}
+              zIndex={zIndex}
+              track={track}
+              i={index}
+              bind={bind}
+              styles={{ transform: interpolate([rot, scale], trans) }}
+            />
+          </animated.div>
+        );
+      } else {
+        //console.log("NO CARDS ");
+        return null;
+      }
+    });
+  } else if (noCard) {
+    return null;
+  } else {
+    //console.log("REGULAR RENDER");
+    return props.map(({ x, y, rot, scale }, index) => {
+      const track = tracks[index];
+      const zIndex = tracks.length - index;
+      if (index === currentIndices[0] || index === currentIndices[1]) {
+        return (
+          <animated.div
+            className="deck-container"
+            key={index}
+            style={{
+              //Added to correct stacking order of cards
+              zIndex: zIndex,
+              transform: interpolate(
+                [x, y],
+                (x, y) => `translate3d(${x}px,${y}px,0)`
+              ),
+            }}
+          >
+            <Card
+              spotify={spotify}
+              previewAudio={previewAudio}
+              setNoPreviewWarning={setNoPreviewWarning}
+              setNoDeviceWarning={setNoDeviceWarning}
+              currentIndex={currentIndices[0]}
+              gone={gone}
+              handleLikeOrDislike={handleLikeOrDislike}
+              zIndex={zIndex}
+              track={track}
+              i={index}
+              bind={bind}
+              styles={{ transform: interpolate([rot, scale], trans) }}
+            />
+          </animated.div>
+        );
+      } else {
+        return null;
+      }
+    });
+  }
 }

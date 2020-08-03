@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Playlist.scss";
 
-export default function Playlist(props) {
+export default function Playlist({ currCategory, info, history }) {
   const [playlistColor, setPlaylistColor] = useState("");
 
   //Generates a random color for each playlist tile
@@ -12,9 +12,8 @@ export default function Playlist(props) {
     ${getRandomNum()}
     )`;
 
-  const playlistTitle = props.info.name;
-  const playlistId = props.info.id;
-  const pathname = `/${props.currCategory}/swipe/${playlistTitle}`;
+  const { name: playlistTitle, id: playlistId, images } = info;
+  const pathname = `/${currCategory}/swipe/${playlistTitle}`;
 
   if (!playlistColor) {
     setPlaylistColor(backgroundColor);
@@ -30,6 +29,7 @@ export default function Playlist(props) {
           playlistColor,
           playlistTitle,
           playlistId,
+          currCategory,
         },
       }}
       className="playlist"
@@ -40,7 +40,7 @@ export default function Playlist(props) {
         <img
           className="playlist-image"
           alt="Playlist"
-          src={`${props.info.images[0].url}`}
+          src={`${images[0].url}`}
         />
       </div>
     </Link>

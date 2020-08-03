@@ -1,16 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
+import { cancelAudioContext } from "../../../App";
 import "./NavButton.scss";
 
 export default function NavButton({ direction }) {
+  const { setCancelAudio, activeAudio } = useContext(cancelAudioContext);
   let history = useHistory();
 
   return (
     <button
       className={`nav-button ${direction}`}
-      onClick={() =>
-        direction === "back" ? history.goBack() : history.goForward()
-      }
+      onClick={() => {
+        //Triggers global context to cancel any audio playing
+        //and then directs to previous route
+        if (direction === "back") {
+          if (activeAudio) setCancelAudio(true);
+          history.goBack();
+        } else {
+          if (activeAudio) setCancelAudio(true);
+          history.goForward();
+        }
+      }}
     >
       <svg viewBox="0 0 24 24" className="arrow-svg">
         <path

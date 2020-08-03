@@ -6,6 +6,7 @@ $green-light-back: #1aa34a;
 $green-dark-back: #1db954;
 
 .swipe-header {
+  width: 100%;
   padding-top: 60px;
   transition: background-color 250ms ease;
   .header-gradient {

@@ -1,0 +1,51 @@
+@keyframes expand {
+  35% {
+    width: 8px;
+    height: 8px;
+  }
+
+  50% {
+    width: 25px;
+    height: 25px;
+  }
+  65% {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+#loading-container {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .dot {
+    background-color: white;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin: 10px;
+    animation: expand 1500ms linear infinite;
+    position: absolute;
+  }
+
+  #dot-1 {
+    animation-delay: 0ms;
+    transform: translateX(-40px);
+  }
+
+  #dot-2 {
+    animation-delay: 140ms;
+  }
+
+  #dot-3 {
+    animation-delay: 280ms;
+    transform: translateX(40px);
+  }
+}

@@ -10,6 +10,9 @@ $dark-black: #121212;
   display: flex;
   justify-content: center;
   align-items: center;
+  outline: none;
+  opacity: 0.95;
+  margin-right: 16px;
 
   &.forward {
     transform: rotate(180deg);

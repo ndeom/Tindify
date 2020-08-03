@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&display=swap");
+
+$light-black: #181818;
+$lighter-black: #282828;
+$green-light-back: #1aa34a;
+$green-dark-back: #1db954;
+$text-grey: #b3b3b3;
+
+#no-preview-warning {
+  .warning-body {
+    a {
+      color: $text-grey;
+
+      &:hover {
+        color: white;
+      }
+    }
+  }
+}

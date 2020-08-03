@@ -4,8 +4,8 @@ const cors = require("cors");
 const querystring = require("querystring");
 const cookieParser = require("cookie-parser");
 
-const client_id = "984475c87e2b4069ae263327152608dd"; // Your client id
-const client_secret = "543f53e2d0b241eab42f48d42a08884b"; // Your secret
+const client_id = process.env.CLIENT_ID; // Your client id
+const client_secret = process.env.CLIENT_SECRET; // Your secret
 const redirect_uri = "http://localhost:8888/callback"; // Your redirect uri
 
 /**
@@ -39,7 +39,8 @@ app.get("/login", function (req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  const scope = "user-read-private user-read-email user-read-playback-state";
+  const scope =
+    "user-read-private user-read-email user-read-playback-state user-modify-playback-state playlist-modify-public";
   res.redirect(
     "https://accounts.spotify.com/authorize?" +
       querystring.stringify({
@@ -140,6 +141,7 @@ app.get("/refresh_token", function (req, res) {
 
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
+      console.log("New token on its way!");
       var access_token = body.access_token;
       res.send({
         access_token: access_token,

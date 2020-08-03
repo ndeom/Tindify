@@ -18,15 +18,30 @@ $menu-font: #b3b3b3;
   border: none;
   border-radius: 999px;
   cursor: pointer;
+  outline: none;
+  opacity: 0.95;
 
   &.active {
     background-color: $lighter-black;
   }
 
   img {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
+  }
+  #placeholder-background {
+    background-color: #333;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    #placeholder-avi {
+      fill: white;
+    }
   }
 
   #chip-name {
@@ -38,8 +53,8 @@ $menu-font: #b3b3b3;
   }
 
   #menu-down-toggle {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     margin-right: 6px;
     margin-left: 8px;
 

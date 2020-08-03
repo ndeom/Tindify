@@ -1,27 +1,37 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useRecoilValue } from "recoil";
+import { atom, useRecoilState, useRecoilValue } from "recoil";
 import { trackColor } from "../../Components/Deck/Deck";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import SwipeHeader from "../../Components/SwipeHeader/SwipeHeader";
 import Deck from "../../Components/Deck/Deck";
-import SpotifyWebApi from "spotify-web-api-js";
+import NoPreviewWarning from "../../Components/NoPreviewWarning/NoPreviewWarning";
+import NoDeviceWarning from "../../Components/NoDeviceWarning/NoDeviceWarning";
 import { userContext } from "../../UserProvider";
 import "./Swipe.scss";
 
-export default function Swipe(props) {
+export default function Swipe() {
   const [currentTracks, setCurrentTracks] = useState([]);
-  const { userToken, tokenTimeout, getNewToken } = useContext(userContext);
-  const primaryColors = useRecoilValue(trackColor);
-  let location = useLocation();
-  const currentDate = new Date();
-  const needNewToken = tokenTimeout < currentDate.getTime();
+  const { userToken, tokenTimeout, getNewToken, spotify } = useContext(
+    userContext
+  );
+  const [noPreviewWarning, setNoPreviewWarning] = useState(false);
+  const [noDeviceWarning, setNoDeviceWarning] = useState(false);
 
-  const { playlistColor, playlistTitle, playlistId } = location.state;
+  let location = useLocation();
+  const [playlistTitle] = useState(location.state.playlistTitle);
+  const [playlistId] = useState(location.state.playlistId);
+  const [currCategory] = useState(location.state.currCategory);
+
+  let history = useHistory();
 
   useEffect(() => {
+    const currentDate = new Date();
+    const needNewToken = tokenTimeout < currentDate.getTime();
     if (!currentTracks.length && !needNewToken) {
-      const spotify = new SpotifyWebApi();
+      //Same comment as category. Most likely need to remove the addition
+      //of the token
       spotify.setAccessToken(userToken);
+
       spotify
         .getPlaylistTracks(playlistId)
         .then((tracks) => {
@@ -36,20 +46,51 @@ export default function Swipe(props) {
     }
   });
 
-  console.log("Primary Color Swipe: ", primaryColors[0]);
-
   return (
     <div id="swipe">
-      <SwipeHeader backgroundColor={primaryColors[0]} title={playlistTitle} />
+      <SwipeHeader title={playlistTitle} />
       <div id="swipe-container">
-        <div
-          id="swipe-container-gradient"
-          style={{ backgroundColor: primaryColors[0] }}
-        ></div>
+        <SwipeGradient />
         <div id="card-container">
-          <Deck tracks={currentTracks} />
+          {currentTracks.length && (
+            <>
+              <Deck
+                tracks={currentTracks}
+                noPreviewWarning={noPreviewWarning}
+                setNoPreviewWarning={setNoPreviewWarning}
+                noDeviceWarning={noDeviceWarning}
+                setNoDeviceWarning={setNoDeviceWarning}
+              />
+              <button id="swipe-back-button" onClick={() => history.goBack()}>
+                {`Find more tracks in ${currCategory}?`}
+              </button>
+            </>
+          )}
         </div>
       </div>
+      {noPreviewWarning && (
+        <NoPreviewWarning
+          noPreviewWarning={noPreviewWarning}
+          setNoPreviewWarning={setNoPreviewWarning}
+        />
+      )}
+      {noDeviceWarning && (
+        <NoDeviceWarning
+          noDeviceWarning={noDeviceWarning}
+          setNoDeviceWarning={setNoDeviceWarning}
+        />
+      )}
     </div>
+  );
+}
+
+function SwipeGradient() {
+  const primaryColors = useRecoilValue(trackColor);
+
+  return (
+    <div
+      id="swipe-container-gradient"
+      style={{ backgroundColor: primaryColors[0] }}
+    ></div>
   );
 }

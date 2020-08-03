@@ -6,6 +6,7 @@ $in-between: #1c1c1c;
 $lighter-black: #282828;
 $green-light-back: #1aa34a;
 $green-dark-back: #1db954;
+$text-grey: #b0b0b0;
 
 #application-header {
   display: flex;
@@ -21,8 +22,30 @@ $green-dark-back: #1db954;
   }
 
   #button-container {
-    width: 80px;
     display: flex;
     justify-content: space-between;
+
+    .nav-chip {
+      margin-right: 16px;
+      height: 32px;
+      background-color: $dark-black;
+      color: $text-grey;
+      font-family: "Nunito Sans", sans-serif;
+      font-weight: 700;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: color 250ms ease;
+      border: none;
+      font-size: 16px;
+      position: relative;
+
+      &:hover {
+        color: white;
+      }
+    }
   }
 }

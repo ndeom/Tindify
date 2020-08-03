@@ -1,9 +1,13 @@
 import React, { useState, useContext } from "react";
 import { userContext } from "../../../UserProvider";
+import { ReactComponent as PlaceholderAvi } from "../../Images/PlaceholderAvi.svg";
 import "./ProfileChip.scss";
 
 export default function ProfileChip(props) {
   const [isToggled, setIsToggled] = useState(false);
+
+  // console.log("props in profileChip: ", props);
+  // console.log("images: ", props.profileInfo);
 
   return (
     <button
@@ -11,14 +15,14 @@ export default function ProfileChip(props) {
       className={`${isToggled ? "active" : ""}`}
       onClick={() => setIsToggled(!isToggled)}
     >
-      <img
-        src={
-          Object.keys(props.profileInfo).length
-            ? props.profileInfo.images[0].url
-            : ""
-        }
-        alt="Avatar"
-      />
+      {Object.keys(props.profileInfo).length &&
+      props.profileInfo.images.length ? (
+        <img src={props.profileInfo.images[0].url} alt="Avatar" />
+      ) : (
+        <div id="placeholder-background">
+          <PlaceholderAvi id="placeholder-avi" />
+        </div>
+      )}
 
       <div id="chip-name">{props.profileInfo.display_name}</div>
       <div id="menu-down-toggle" className={`${isToggled ? "down" : ""}`}>
@@ -38,7 +42,12 @@ function ToggleDropdown() {
   const { logoutUser } = useContext(userContext);
 
   return (
-    <div id="drop-down-menu" onClick={() => logoutUser()}>
+    <div
+      id="drop-down-menu"
+      onClick={() => {
+        logoutUser();
+      }}
+    >
       <span>Logout</span>
     </div>
   );

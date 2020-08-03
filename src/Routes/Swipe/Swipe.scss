@@ -9,11 +9,17 @@ $green-dark-back: #1db954;
 #swipe {
   overflow: hidden;
   width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   #swipe-container {
     position: relative;
     background-color: $dark-black;
+    width: 100%;
     height: 600px;
+
     #swipe-container-gradient {
       position: absolute;
       height: 232px;
@@ -26,8 +32,10 @@ $green-dark-back: #1db954;
       width: 100%;
       height: 100%;
       position: relative;
+      display: flex;
+      justify-content: center;
 
-      & > div {
+      & > .deck-container {
         position: absolute;
         width: 100%;
         height: 80%;
@@ -35,14 +43,27 @@ $green-dark-back: #1db954;
         display: flex;
         justify-content: center;
         align-items: center;
+      }
 
-        // & > div {
-        //   width: 300px;
-        //   height: 500px;
-        //   background-color: rgb(200, 200, 200);
-        //   border: 1px solid black;
-        //   border-radius: 10px;
-        // }
+      #swipe-back-button {
+        position: absolute;
+        align-self: center;
+        font-weight: 700;
+        font-size: 18px;
+        color: white;
+        background-color: $green-dark-back;
+        text-decoration: none;
+        line-height: 1.5;
+        padding: 1rem 2rem;
+        border-radius: 999px;
+        letter-spacing: 1px;
+        max-width: 300px;
+        transition: filter 150ms cubic-bezier(0.215, 0.61, 0.355, 1);
+        border: none;
+
+        &:hover {
+          filter: brightness(1.1);
+        }
       }
     }
   }
