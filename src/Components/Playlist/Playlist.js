@@ -35,14 +35,15 @@ export default function Playlist({ currCategory, info, history }) {
       className="playlist"
       style={{ backgroundColor: playlistColor }}
     >
-      <div className="gradient">
+      {/* <div className="gradient">
         <h3 className="playlist-title">{`${playlistTitle}`}</h3>
         <img
           className="playlist-image"
           alt="Playlist"
           src={`${images[0].url}`}
         />
-      </div>
+      </div> */}
+      <img className="playlist-image" alt="Playlist" src={`${images[0].url}`} />
     </Link>
   );
 }
