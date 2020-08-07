@@ -14,6 +14,7 @@ export default function ProfileChip(props) {
       id="profile-chip"
       className={`${isToggled ? "active" : ""}`}
       onClick={() => setIsToggled(!isToggled)}
+      onBlur={() => setIsToggled(false)}
     >
       {Object.keys(props.profileInfo).length &&
       props.profileInfo.images.length ? (
@@ -42,13 +43,13 @@ function ToggleDropdown() {
   const { logoutUser } = useContext(userContext);
 
   return (
-    <div
+    <ul
       id="drop-down-menu"
       onClick={() => {
         logoutUser();
       }}
     >
-      <span>Logout</span>
-    </div>
+      <li>Logout</li>
+    </ul>
   );
 }

@@ -17,35 +17,48 @@ export default function ButtonControls({
   gone,
   i,
   hasPremium,
-  previewAudio,
+  //previewAudio,
   handleLikeOrDislike,
 }) {
   const { setActiveAudio } = useContext(cancelAudioContext);
-  const { spotify } = useContext(userContext);
+  const { spotify, previewAudio } = useContext(userContext);
 
   const togglePlayState = () => {
     if (hasPremium) {
       if (isPlaying) {
-        spotify.pause({ uris: [uri] });
+        spotify
+          .pause({ uris: [uri] })
+          .catch((err) => console.error("Error toggling play state", err));
         setActiveAudio(false);
       } else {
-        spotify.play({
-          uris: [uri],
-          position_ms: playbackState.current.elapsed,
-        });
+        spotify
+          .play({
+            uris: [uri],
+            position_ms: playbackState.current.elapsed,
+          })
+          .catch((err) => console.error("Error toggling play state", err));
         setActiveAudio(true);
       }
     } else {
       if (isPlaying) {
-        previewAudio.pause();
+        previewAudio
+          .pause()
+          .catch((err) =>
+            console.error("Error toggling preview play state", err)
+          );
         setActiveAudio(false);
       } else {
-        previewAudio.play();
+        previewAudio
+          .play()
+          .catch((err) =>
+            console.error("Error toggling preview play state", err)
+          );
         setActiveAudio(true);
       }
     }
     console.log("isPlaying: ", isPlaying);
-    setIsPlaying(!isPlaying);
+    isPlaying ? setIsPlaying(false) : setIsPlaying(true);
+    //setIsPlaying(!isPlaying);
   };
 
   return (

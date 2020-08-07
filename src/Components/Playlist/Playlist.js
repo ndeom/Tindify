@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Playlist.scss";
 
@@ -15,11 +15,11 @@ export default function Playlist({ currCategory, info, history }) {
   const { name: playlistTitle, id: playlistId, images } = info;
   const pathname = `/${currCategory}/swipe/${playlistTitle}`;
 
-  if (!playlistColor) {
-    setPlaylistColor(backgroundColor);
-  }
-
-  //console.log("props.INFO", props.info);
+  useLayoutEffect(() => {
+    if (!playlistColor) {
+      setPlaylistColor(backgroundColor);
+    }
+  }, [backgroundColor, playlistColor]);
 
   return (
     <Link

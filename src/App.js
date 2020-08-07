@@ -6,19 +6,43 @@ import Browse from "./Routes/Browse/Browse";
 import Swipe from "./Routes/Swipe/Swipe";
 import ApplicationHeader from "./Components/ApplicationHeader/ApplicationHeader";
 import CategoryRoute from "./Routes/Category/CategoryRoute";
+import TindifyPlaylist from "./Routes/TindifyPlaylist/TindifyPlaylist";
 import { userContext } from "./UserProvider";
 import "./App.scss";
+import SpotifyWebApi from "spotify-web-api-js";
 
 export const cancelAudioContext = React.createContext({});
 
 function App() {
-  const { userToken } = useContext(userContext);
+  const { userToken, userInfo, previewAudio } = useContext(userContext);
   const [cancelAudio, setCancelAudio] = useState(false);
   const [activeAudio, setActiveAudio] = useState(false);
+  //const [hasPremium] = useState(userInfo.product === "premium");
+
+  //Need to finish moving everything from Deck and Card
+  // useEffect(() => {
+  //   if (cancelAudio && !hasPremium) {
+  //     previewAudio.pause();
+  //     setActiveAudio(false);
+  //   }
+
+  //   if (cancelAudio && hasPremium) {
+  //     const spotify = new SpotifyWebApi();
+  //     spotify.setAccessToken(userToken);
+  //     spotify.pause();
+  //     setActiveAudio(false);
+  //   }
+  // });
 
   return (
     <cancelAudioContext.Provider
-      value={{ cancelAudio, setCancelAudio, activeAudio, setActiveAudio }}
+      value={{
+        cancelAudio,
+        setCancelAudio,
+        activeAudio,
+        setActiveAudio,
+        //hasPremium,
+      }}
     >
       <Switch>
         <Route exact path="/">
@@ -31,6 +55,11 @@ function App() {
           <ScrollToTop />
           <ApplicationHeader />
           <Browse />
+        </Route>
+        <Route path="/mytindify">
+          <ScrollToTop />
+          <ApplicationHeader />
+          <TindifyPlaylist />
         </Route>
         <Route path="/:category/swipe/:playlist">
           <ScrollToTop />

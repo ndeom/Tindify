@@ -9,20 +9,36 @@ $green-dark-back: #1db954;
 $another-black: #181818;
 $thumb-bar: #ffffff4d;
 
-#browse {
+.browse {
   background-color: $in-between;
   color: white;
   padding-top: 60px;
   min-height: 100vh;
+  position: relative;
+
+  box-sizing: border-box;
   /*display: grid;
   grid-template-columns: auto auto auto auto auto;
   grid-template-rows: auto;
   column-gap: 16px;
   row-gap: 16px;*/
 
-  #categories {
+  .category-section {
+    min-height: 300px;
+    position: relative;
     display: flex;
-    flex-wrap: wrap;
-    padding: 0 60px;
+    flex-direction: column;
+    padding-bottom: 30px;
+
+    .categories {
+      // display: flex;
+      // flex-wrap: wrap;
+      padding: 0 74px;
+      display: grid;
+      grid-gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(164px, 1fr));
+      //grid-auto-rows: auto;
+      grid-auto-rows: minmax(164px, 1fr);
+    }
   }
 }

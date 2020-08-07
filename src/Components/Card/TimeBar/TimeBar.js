@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { userContext } from "../../../UserProvider";
+import { cancelAudioContext } from "../../../App";
 import "./TimeBar.scss";
 
 let i = 0;
@@ -10,12 +11,13 @@ export default function TimeBar({
   isPlaying,
   playbackState,
   hasPremium,
-  previewAudio,
+  //previewAudio,
   songEnded,
   setSongEnded,
   currentIndex,
 }) {
-  const { spotify } = useContext(userContext);
+  const { spotify, previewAudio } = useContext(userContext);
+  const { setActiveAudio } = useContext(cancelAudioContext);
 
   const trackDuration = hasPremium ? trackLength : 30000;
 
@@ -115,8 +117,16 @@ export default function TimeBar({
       setTime({ elapsed: trackDuration, remaining: 0 });
       playbackState.current = { elapsed: trackDuration, remaining: 0 };
       setSongEnded(true);
+      setActiveAudio(false);
     }
-  }, [hasPremium, playbackState, setSongEnded, time.elapsed, trackDuration]);
+  }, [
+    hasPremium,
+    playbackState,
+    setActiveAudio,
+    setSongEnded,
+    time.elapsed,
+    trackDuration,
+  ]);
 
   return (
     <div className="time-bar">

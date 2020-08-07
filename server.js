@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express"); // Express web server framework
 const request = require("request"); // "Request" library
 const cors = require("cors");
@@ -38,7 +39,6 @@ app.get("/login", function (req, res) {
   const state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  // your application requests authorization
   const scope =
     "user-read-private user-read-email user-read-playback-state user-modify-playback-state playlist-modify-public";
   res.redirect(
@@ -54,9 +54,6 @@ app.get("/login", function (req, res) {
 });
 
 app.get("/callback", function (req, res) {
-  // your application requests refresh and access tokens
-  // after checking the state parameter
-
   const code = req.query.code || null;
   const state = req.query.state || null;
   const storedState = req.cookies ? req.cookies[stateKey] : null;
@@ -87,7 +84,7 @@ app.get("/callback", function (req, res) {
 
     request.post(authOptions, function (error, response, body) {
       if (!error && response.statusCode === 200) {
-        console.log("This is the response body", body);
+        //console.log("This is the response body", body);
         const access_token = body.access_token,
           refresh_token = body.refresh_token;
 
@@ -97,12 +94,11 @@ app.get("/callback", function (req, res) {
           json: true,
         };
 
-        // use the access token to access the Spotify Web API
-        request.get(options, function (error, response, body) {
-          console.log(body);
-        });
+        // // use the access token to access the Spotify Web API
+        // request.get(options, function (error, response, body) {
+        //   //console.log(body);
+        // });
 
-        // we can also pass the token to the browser to make requests from there
         res.redirect(
           "http://localhost:3000/#" +
             querystring.stringify({
@@ -123,6 +119,7 @@ app.get("/callback", function (req, res) {
 });
 
 app.get("/refresh_token", function (req, res) {
+  console.log("Entered the refresh route");
   // requesting access token from refresh token
   const refresh_token = req.query.refresh_token;
   const authOptions = {

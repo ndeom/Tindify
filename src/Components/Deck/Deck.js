@@ -6,6 +6,7 @@ import { useSprings, animated, interpolate } from "react-spring";
 import { useDrag } from "react-use-gesture";
 
 import "./Deck.scss";
+import SpotifyWebApi from "spotify-web-api-js";
 
 const to = (i) => ({
   x: 0,
@@ -30,7 +31,7 @@ export default function Deck({
   noPreviewWarning,
   setNoPreviewWarning,
 }) {
-  const { userInfo, spotify } = useContext(userContext);
+  const { userInfo, userToken, previewAudio } = useContext(userContext);
   const [currentIndices, setCurrentIndices] = useState([0, 1]);
   const [color, setColor] = useRecoilState(trackColor);
   const [gone] = useState(() => new Set());
@@ -38,7 +39,7 @@ export default function Deck({
     ...to(index),
     from: from(index),
   }));
-  const [previewAudio, setPreviewAudio] = useState(new Audio());
+  //const [previewAudio, setPreviewAudio] = useState(new Audio());
 
   const secondToLastCard = currentIndices[1] === tracks.length - 1;
   const lastCard = currentIndices[0] === tracks.length - 1;
@@ -61,7 +62,10 @@ export default function Deck({
   };
 
   const addToPlaylist = async () => {
-    console.log("spotify: ", spotify);
+    const spotify = new SpotifyWebApi();
+    spotify.setAccessToken(userToken);
+
+    //console.log("spotify: ", spotify);
     //console.log("user ID: ", userInfo.id);
     try {
       const { items: userPlaylists } = await spotify.getUserPlaylists(
@@ -70,6 +74,7 @@ export default function Deck({
       const tindify = userPlaylists.filter(
         (playlist) => playlist.name === "Tindify"
       )[0];
+
       let playlistId;
       if (!tindify) {
         const playlist = await spotify.createPlaylist(userInfo.id, {
@@ -79,11 +84,37 @@ export default function Deck({
       } else {
         playlistId = tindify.id;
       }
+
+      const { items: tindifyTracks } = await spotify.getPlaylistTracks(
+        playlistId
+      );
+      // console.log("response: ", response);
+      // const tracks = response.items;
+      //console.log("tracks: ", tindifyTracks);
+
+      //Check if track is already in playlist. If not, add to playlist.
+      console.log("currentIndices[0]", currentIndices[0]);
       const currentTrackUri = tracks[currentIndices[0]].track.uri;
-      const updatedPlaylist = await spotify.addTracksToPlaylist(playlistId, [
-        currentTrackUri,
-      ]);
-      console.log("udpatedPlaylist: ", updatedPlaylist);
+      console.log("curren track: ", tracks[currentIndices[0]]);
+
+      //console.log("track", tracks[currentIndices[0]]);
+
+      console.log("currentTrackUri", currentTrackUri);
+
+      const filtered = tindifyTracks.filter((track) => {
+        console.log("track.track.uri: ", track.track.uri);
+        console.log("currentTrackUri: ", currentTrackUri);
+        return track.track.uri === currentTrackUri;
+      });
+
+      console.log("filtered: ", filtered);
+
+      if (!filtered.length) {
+        const updatedPlaylist = await spotify.addTracksToPlaylist(playlistId, [
+          currentTrackUri,
+        ]);
+        console.log("udpatedPlaylist: ", updatedPlaylist);
+      }
     } catch (error) {
       console.error("Error adding song to Tindify playlist!", error);
     }
@@ -262,7 +293,7 @@ export default function Deck({
             }}
           >
             <Card
-              spotify={spotify}
+              //spotify={spotify}
               previewAudio={previewAudio}
               setNoPreviewWarning={setNoPreviewWarning}
               setNoDeviceWarning={setNoDeviceWarning}

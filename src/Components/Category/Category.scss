@@ -7,26 +7,29 @@ $green-dark-back: #1db954;
 
 .category {
   /*background-color: $lighter-black;*/
-  width: 200px;
-  min-height: 200px;
+  //width: 200px;
+  //min-height: 200px;
+  width: 100%;
+  height: 100%;
   border-radius: 8px;
-  justify-self: center;
-  align-self: center;
-  margin: 12px;
+  //justify-self: center;
+  //align-self: center;
+  //margin: 12px;
   position: relative;
   cursor: pointer;
+  box-sizing: border-box;
 
-  #playlists {
-    position: relative;
-    #no-data-warning {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-    }
-  }
+  // #playlists {
+  //   position: relative;
+  //   #no-data-warning {
+  //     width: 100%;
+  //     height: 100%;
+  //     display: flex;
+  //     justify-content: center;
+  //     align-items: center;
+  //     color: white;
+  //   }
+  // }
 
   .gradient {
     position: absolute;
@@ -44,6 +47,7 @@ $green-dark-back: #1db954;
       font-weight: 700;
       font-size: 24px;
       line-height: 1.3em;
+      z-index: 1;
     }
 
     .category-image {

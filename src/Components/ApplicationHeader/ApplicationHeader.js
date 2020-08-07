@@ -1,14 +1,17 @@
 import React, { useState, useContext } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { userContext } from "../../UserProvider";
+import { cancelAudioContext } from "../../App";
 import NavButton from "./NavButton/NavButton";
 import ProfileChip from "./ProfileChip/ProfileChip";
-import TindifyPlaylist from "../TindifyPlaylist/TindifyPlaylist";
+//import TindifyPlaylist from "../../Routes/TindifyPlaylist/TindifyPlaylist";
 import { useScrollPosition } from "../../utils/useScrollPosition";
 import "./ApplicationHeader.scss";
+//import { constSelector } from "recoil";
 
 export default function ApplicationHeader() {
   const { userInfo } = useContext(userContext);
-  const [displayPlaylist, setDisplayPlaylist] = useState(false);
+  //const [displayPlaylist, setDisplayPlaylist] = useState(false);
 
   const [headerHasBackground, setHeaderHasBackground] = useState(false);
 
@@ -23,36 +26,75 @@ export default function ApplicationHeader() {
   );
 
   return (
-    <div
+    <header
       id="application-header"
       className={`${headerHasBackground ? "filled" : ""}`}
     >
-      <div id="button-container">
+      <nav id="button-container">
         <NavButton direction={"back"} />
         <NavButton direction={"forward"} />
-        <NavChip children={"Browse"} />
-        <TindifyNavChip setDisplayPlaylist={setDisplayPlaylist}>
+        <NavChip children={"Browse"} path={"/browse"} />
+        <NavChip children={"My Tindify"} path={"/mytindify"} />
+        {/*<TindifyNavChip
+          displayPlaylist={displayPlaylist}
+          setDisplayPlaylist={setDisplayPlaylist}
+        >
           {"My Tindify"}
-          {!!displayPlaylist && <TindifyPlaylist />}
-        </TindifyNavChip>
-      </div>
+          {!!displayPlaylist && (
+            <TindifyPlaylist
+              displayPlaylist={displayPlaylist}
+              setDisplayPlaylist={setDisplayPlaylist}
+            />
+          )}
+          </TindifyNavChip>*/}
+      </nav>
       <ProfileChip profileInfo={userInfo} />
-    </div>
+    </header>
   );
 }
 
-function NavChip({ children }) {
-  return <button className="nav-chip">{children}</button>;
-}
+function NavChip({ children, path }) {
+  const { spotify, userInfo, userToken, previewAudio } = useContext(
+    userContext
+  );
+  const { activeAudio, setActiveAudio } = useContext(cancelAudioContext);
+  const location = useLocation();
+  const currentPath = location.pathname === path;
 
-function TindifyNavChip({ children, setDisplayPlaylist }) {
   return (
-    <button
-      className="nav-chip"
-      onClick={() => setDisplayPlaylist(true)}
-      onBlur={() => setDisplayPlaylist(false)}
+    <Link
+      to={{ pathname: path }}
+      className={`nav-chip ${currentPath ? "active" : ""}`}
+      onClick={() => {
+        if (activeAudio) {
+          const hasPremium = userInfo.product === "premium";
+          if (hasPremium) {
+            spotify.setAccessToken(userToken);
+            spotify
+              .pause()
+              .catch((err) =>
+                console.error("Error pausing audio on reroute", err)
+              );
+          } else {
+            previewAudio.pause();
+          }
+          setActiveAudio(false);
+        }
+      }}
     >
       {children}
-    </button>
+    </Link>
   );
 }
+
+// function TindifyNavChip({ children, displayPlaylist, setDisplayPlaylist }) {
+//   return (
+//     <button
+//       className={`nav-chip ${displayPlaylist ? "active" : ""}`}
+//       onClick={() => setDisplayPlaylist(true)}
+//       //onBlur={() => setDisplayPlaylist(false)}
+//     >
+//       {children}
+//     </button>
+//   );
+// }

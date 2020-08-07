@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { atom, useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { trackColor } from "../../Components/Deck/Deck";
 import { useLocation, useHistory } from "react-router-dom";
 import SwipeHeader from "../../Components/SwipeHeader/SwipeHeader";
@@ -7,13 +7,20 @@ import Deck from "../../Components/Deck/Deck";
 import NoPreviewWarning from "../../Components/NoPreviewWarning/NoPreviewWarning";
 import NoDeviceWarning from "../../Components/NoDeviceWarning/NoDeviceWarning";
 import { userContext } from "../../UserProvider";
+import { cancelAudioContext } from "../../App";
 import "./Swipe.scss";
 
 export default function Swipe() {
   const [currentTracks, setCurrentTracks] = useState([]);
-  const { userToken, tokenTimeout, getNewToken, spotify } = useContext(
-    userContext
-  );
+  const {
+    userToken,
+    userInfo,
+    tokenTimeout,
+    getNewToken,
+    spotify,
+    previewAudio,
+  } = useContext(userContext);
+  const { activeAudio, setActiveAudio } = useContext(cancelAudioContext);
   const [noPreviewWarning, setNoPreviewWarning] = useState(false);
   const [noDeviceWarning, setNoDeviceWarning] = useState(false);
 
@@ -28,8 +35,6 @@ export default function Swipe() {
     const currentDate = new Date();
     const needNewToken = tokenTimeout < currentDate.getTime();
     if (!currentTracks.length && !needNewToken) {
-      //Same comment as category. Most likely need to remove the addition
-      //of the token
       spotify.setAccessToken(userToken);
 
       spotify
@@ -38,7 +43,7 @@ export default function Swipe() {
           console.log("Tracks", tracks);
           setCurrentTracks(tracks.items);
         })
-        .catch((err) => console.error(err));
+        .catch((err) => console.error("Error getting playlist tracks!", err));
     }
 
     if (needNewToken) {
@@ -61,7 +66,26 @@ export default function Swipe() {
                 noDeviceWarning={noDeviceWarning}
                 setNoDeviceWarning={setNoDeviceWarning}
               />
-              <button id="swipe-back-button" onClick={() => history.goBack()}>
+              <button
+                id="swipe-back-button"
+                onClick={() => {
+                  if (activeAudio) {
+                    const hasPremium = userInfo.product === "premium";
+                    if (hasPremium) {
+                      spotify.setAccessToken(userToken);
+                      spotify
+                        .pause()
+                        .catch((err) =>
+                          console.error("Error pausing audio on reroute", err)
+                        );
+                    } else {
+                      previewAudio.pause();
+                    }
+                    setActiveAudio(false);
+                  }
+                  history.goBack();
+                }}
+              >
                 {`Find more tracks in ${currCategory}?`}
               </button>
             </>

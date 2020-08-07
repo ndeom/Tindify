@@ -40,8 +40,14 @@ $text-grey: #b0b0b0;
       cursor: pointer;
       transition: color 250ms ease;
       border: none;
-      font-size: 16px;
+      font-size: 14px;
       position: relative;
+      outline: none;
+      text-decoration: none;
+
+      &.active {
+        color: white;
+      }
 
       &:hover {
         color: white;

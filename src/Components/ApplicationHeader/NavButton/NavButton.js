@@ -1,23 +1,41 @@
 import React, { useContext } from "react";
+//import SpotifyWebApi from "spotify-web-api-js";
 import { useHistory } from "react-router-dom";
+import { userContext } from "../../../UserProvider";
 import { cancelAudioContext } from "../../../App";
 import "./NavButton.scss";
 
 export default function NavButton({ direction }) {
-  const { setCancelAudio, activeAudio } = useContext(cancelAudioContext);
+  const { previewAudio, userToken, userInfo, spotify } = useContext(
+    userContext
+  );
+  const { activeAudio, setActiveAudio } = useContext(cancelAudioContext);
   let history = useHistory();
 
   return (
     <button
       className={`nav-button ${direction}`}
       onClick={() => {
-        //Triggers global context to cancel any audio playing
-        //and then directs to previous route
+        if (activeAudio) {
+          const hasPremium = userInfo.product === "premium";
+          if (hasPremium) {
+            spotify.setAccessToken(userToken);
+            spotify
+              .pause()
+              .catch((err) =>
+                console.error("Error pausing audio on reroute", err)
+              );
+          } else {
+            previewAudio.pause();
+          }
+          setActiveAudio(false);
+        }
+
         if (direction === "back") {
-          if (activeAudio) setCancelAudio(true);
+          //if (activeAudio) setCancelAudio(true);
           history.goBack();
         } else {
-          if (activeAudio) setCancelAudio(true);
+          //if (activeAudio) setCancelAudio(true);
           history.goForward();
         }
       }}

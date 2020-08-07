@@ -6,6 +6,7 @@ import Loading from "../../Components/Loading/Loading";
 import { userContext } from "../../UserProvider";
 import { useScrollPosition } from "../../utils/useScrollPosition";
 import "./CategoryRoute.scss";
+import SpotifyWebApi from "spotify-web-api-js";
 
 export default function CategoryRoute(props) {
   const [currentPlaylists, setCurrentPlaylists] = useState([]);
@@ -13,9 +14,7 @@ export default function CategoryRoute(props) {
   const [noReturnedPlaylists, setReturnedNoPlaylists] = useState(false);
   const [morePlaylists, setMorePlaylists] = useState(false);
   const [offset, setOffset] = useState(0);
-  const { userToken, tokenTimeout, getNewToken, spotify } = useContext(
-    userContext
-  );
+  const { userToken, tokenTimeout, getNewToken } = useContext(userContext);
   const params = useParams();
   const history = useHistory();
   const location = useLocation();
@@ -25,13 +24,11 @@ export default function CategoryRoute(props) {
 
   useEffect(() => {
     if (!currentPlaylists.length && !needNewToken) {
-      console.log(spotify);
-      //Probably don't need to set token here
-      //Consider removing and adding to condition for new token below
+      const spotify = new SpotifyWebApi();
 
-      //spotify.setAccessToken(userToken);
+      spotify.setAccessToken(userToken);
       spotify
-        .getCategoryPlaylists(currCategory)
+        .getCategoryPlaylists(currCategory, { limit: 50 })
         .then(({ playlists }) => {
           console.log("playlists", playlists);
 
@@ -63,11 +60,11 @@ export default function CategoryRoute(props) {
     const scrolledToBottom =
       -1 * currPos.y + window.innerHeight === documentHeight;
     if (scrolledToBottom && morePlaylists) {
+      const spotify = new SpotifyWebApi();
+      spotify.setAccessToken(userToken);
       setLoading(true);
-      console.log("LOADING");
-      console.log("offset is: ", offset);
       spotify
-        .getCategoryPlaylists(currCategory, { offset })
+        .getCategoryPlaylists(currCategory, { offset, limit: 50 })
         .then(({ playlists }) => {
           const combinedPlaylists = [...currentPlaylists, ...playlists.items];
           setCurrentPlaylists(combinedPlaylists);
@@ -87,25 +84,30 @@ export default function CategoryRoute(props) {
   return (
     <div id="category-route">
       <RouteHeader title={location.state.categoryTitle} />
-      <div id="playlists">
-        {!!currentPlaylists.length &&
-          currentPlaylists.map((playlist, i) => (
-            <Playlist
-              key={`playlist-${i}`}
-              currCategory={currCategory}
-              info={playlist}
-              history={history}
-            />
-          ))}
-        {!!loading && <Loading />}
-        {!!noReturnedPlaylists && (
-          <div id="no-data-warning">
-            There was either an error or no playlist results were returned.
-            Either navigate back to the Browse route and pick a new category or
-            refresh the page.
-          </div>
-        )}
-      </div>
+      <section className="playlist-section" aria-label="Browse playlists">
+        <div id="playlists">
+          {!!currentPlaylists.length &&
+            currentPlaylists.map((playlist, i) => (
+              <Playlist
+                key={`playlist-${i}`}
+                currCategory={currCategory}
+                info={playlist}
+                history={history}
+              />
+            ))}
+          {!!loading && <Loading />}
+          {!!noReturnedPlaylists && (
+            <div id="no-data-warning">
+              <span id="oops">Oops...</span>
+              <span id="oops-body">
+                There was either an error or no playlist results were returned.
+                Either navigate back to the Browse route and pick a new category
+                or refresh the page.
+              </span>
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

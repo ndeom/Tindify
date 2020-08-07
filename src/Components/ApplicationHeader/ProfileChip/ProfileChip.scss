@@ -4,6 +4,7 @@ $dark-black: #121212;
 $light-black: #181818;
 $in-between: #1c1c1c;
 $lighter-black: #282828;
+$lightest-black: #363636;
 $green-light-back: #1aa34a;
 $green-dark-back: #1db954;
 $menu-font: #b3b3b3;
@@ -22,6 +23,10 @@ $menu-font: #b3b3b3;
   opacity: 0.95;
 
   &.active {
+    background-color: $lighter-black;
+  }
+
+  &:hover {
     background-color: $lighter-black;
   }
 
@@ -45,7 +50,7 @@ $menu-font: #b3b3b3;
   }
 
   #chip-name {
-    font-size: 16px;
+    font-size: 14px;
     color: white;
     font-family: "Nunito Sans", sans-serif;
     font-weight: 700;
@@ -73,23 +78,30 @@ $menu-font: #b3b3b3;
     position: absolute;
     display: flex;
     align-items: center;
+    min-width: 160px;
     right: 0;
     top: 46px;
     background-color: $lighter-black;
     min-width: 100%;
     height: 50px;
-    border-radius: 3px;
+    border-radius: 4px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.7);
-    transition: filter 150ms ease;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 
-    &:hover {
-      filter: brightness(115%);
-    }
-
-    span {
+    li {
       font-family: "Nunito Sans", sans-serif;
       color: $menu-font;
-      padding: 3px 20px;
+      padding: 8px 20px;
+      margin: 4px 0;
+      width: 100%;
+      text-align: left;
+
+      &:hover {
+        color: white;
+        background-color: $lightest-black;
+      }
     }
   }
 }

@@ -12,20 +12,14 @@ export default function Browse(props) {
   const { userToken, tokenTimeout, getNewToken, spotify } = useContext(
     userContext
   );
-  //console.log("categories: ", categories);
 
-  let history = useHistory();
-  const currentDate = new Date();
-
-  //console.log("tokenTimeout", tokenTimeout);
-  //console.log("current date", currentDate.getTime());
-  const needNewToken = tokenTimeout < currentDate.getTime();
+  const history = useHistory();
 
   useEffect(() => {
+    const currentDate = new Date();
+    const needNewToken = tokenTimeout < currentDate.getTime();
     if (!Object.keys(categories).length && !needNewToken) {
       setLoading(true);
-      console.log("LOADING");
-      console.log(spotify);
       spotify.setAccessToken(userToken);
       spotify
         .getCategories({ limit: 50 })
@@ -44,15 +38,17 @@ export default function Browse(props) {
   });
 
   return (
-    <div id="browse">
+    <div className="browse">
       <RouteHeader title={"Browse"} />
-      <div id="categories">
-        {!!Object.keys(categories).length &&
-          categories.items.map((category, i) => (
-            <Category key={`cat-${i}`} info={category} history={history} />
-          ))}
-        {loading && <Loading />}
-      </div>
+      <section className="category-section" aria-label="Browse categories">
+        <div className="categories">
+          {!!Object.keys(categories).length &&
+            categories.items.map((category, i) => (
+              <Category key={`cat-${i}`} info={category} history={history} />
+            ))}
+          {loading && <Loading />}
+        </div>
+      </section>
     </div>
   );
 }

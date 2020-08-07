@@ -13,6 +13,7 @@ import hexToRgba from "../../utils/hexToRgba";
 import TimeBar from "./TimeBar/TimeBar";
 import ButtonControls from "./ButtonControls/ButtonControls";
 import "./Card.scss";
+import SpotifyWebApi from "spotify-web-api-js";
 
 export default function Card({
   i,
@@ -25,9 +26,9 @@ export default function Card({
   setNoPreviewWarning,
   setNoDeviceWarning,
   handleLikeOrDislike,
-  previewAudio,
+  //previewAudio,
 }) {
-  const { userToken, userInfo, spotify } = useContext(userContext);
+  const { userToken, userInfo, previewAudio } = useContext(userContext);
   const { cancelAudio, setCancelAudio, setActiveAudio } = useContext(
     cancelAudioContext
   );
@@ -55,18 +56,25 @@ export default function Card({
   const [songStarted, setSongStarted] = useState(false);
   const [songEnded, setSongEnded] = useState(false);
 
-  //Cancels audio for both premium and regular users
-  useEffect(() => {
-    if (cancelAudio && !hasPremium) {
-      previewAudio.pause();
-      setActiveAudio(false);
-    }
+  //Cancels audio for both premium and regular users on unmount
+  // useEffect(() => {
+  //   const spotify = new SpotifyWebApi();
+  //   spotify.setAccessToken(userToken);
 
-    if (cancelAudio && hasPremium) {
-      spotify.pause({ uris: [uri] });
-      setActiveAudio(false);
-    }
-  });
+  //   if (cancelAudio && !hasPremium) {
+  //     previewAudio.pause();
+  //     setActiveAudio(false);
+  //   }
+
+  //   if (cancelAudio && hasPremium) {
+  //     spotify
+  //       .pause()
+  //       .then(() => console.log("PAUSED"))
+  //       .catch((err) => console.error("Error in cleanup function!", err));
+  //     setActiveAudio(false);
+  //     console.log("spotify paused after unmount");
+  //   }
+  // }, [cancelAudio, hasPremium, previewAudio, setActiveAudio, uri, userToken]);
 
   //Handles event listeners for previewAudio
   useEffect(() => {
@@ -143,30 +151,47 @@ export default function Card({
     if (songStarted) return;
 
     const checkForActiveDevices = async () => {
-      console.log("Checking for active devices");
-      spotify.setAccessToken(userToken);
-      const devices = await spotify.getMyDevices();
-      return devices;
+      try {
+        const spotify = new SpotifyWebApi();
+        spotify.setAccessToken(userToken);
+        console.log("Checking for active devices");
+
+        const devices = await spotify.getMyDevices();
+        return devices;
+      } catch (error) {
+        console.error("Error getting user devices!", error);
+      }
     };
 
     const startPremiumPlayback = async () => {
-      const { devices } = await checkForActiveDevices();
+      try {
+        const { devices } = await checkForActiveDevices();
 
-      console.log("Active devices: ", devices);
-      console.log("cancelAudio: ", cancelAudio);
-      console.log("isPlaying: ", isPlaying, "index: ", currentIndex);
+        console.log("Active devices: ", devices);
+        console.log("cancelAudio: ", cancelAudio);
+        console.log("isPlaying: ", isPlaying, "index: ", currentIndex);
+        //console.log("Current spotify object: ", spotify);
 
-      if (cancelAudio) {
-        setCancelAudio(false);
-      }
+        if (cancelAudio) {
+          setCancelAudio(false);
+        }
 
-      if (!devices.length) {
-        setNoDeviceWarning(true);
-      } else {
-        setIsPlaying(true);
-        setActiveAudio(true);
-        setSongStarted(true);
-        spotify.play({ device_id: devices[0].id, uris: [uri], position_ms: 0 });
+        if (!devices.length) {
+          setNoDeviceWarning(true);
+        } else {
+          const spotify = new SpotifyWebApi();
+          spotify.setAccessToken(userToken);
+          setIsPlaying(true);
+          setActiveAudio(true);
+          setSongStarted(true);
+          spotify.play({
+            device_id: devices[0].id,
+            uris: [uri],
+            position_ms: 0,
+          });
+        }
+      } catch (error) {
+        console.error("Error starting premium playback!", error);
       }
     };
 
@@ -181,7 +206,6 @@ export default function Card({
     setCancelAudio,
     setNoDeviceWarning,
     songStarted,
-    spotify,
     uri,
     userToken,
   ]);
@@ -282,7 +306,7 @@ function FadedEdges({ containerClass, children, primaryColor }) {
   }, []);
 
   return (
-    <div className={containerClass}>
+    <div className={`${containerClass} ${scrollable ? "scrollable" : ""}`}>
       <span
         className="left-gradient"
         style={{
