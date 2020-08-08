@@ -48,7 +48,7 @@ export default function ButtonControls({
         setActiveAudio(true);
       }
     }
-    console.log("isPlaying: ", isPlaying);
+    //console.log("isPlaying: ", isPlaying);
     isPlaying ? setIsPlaying(false) : setIsPlaying(true);
     //setIsPlaying(!isPlaying);
   };

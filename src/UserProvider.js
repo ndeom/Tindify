@@ -64,28 +64,15 @@ export default function UserProvider(props) {
   };
 
   useEffect(() => {
-    // console.log("params token: ", params.refresh_token);
-    // console.log("refresh_token: ", refreshToken);
     if (!userToken && localStorage.getItem("userTokenKey")) {
-      // console.log(
-      //   "user token from storage: ",
-      //   localStorage.getItem("userTokenKey")
-      // );
-      // console.log(
-      //   "%c Getting from localStorage ",
-      //   "background: #000; color: #bada55"
-      // );
       setUserToken(localStorage.getItem("userTokenKey"));
       let userObj = JSON.parse(localStorage.getItem("userInfoKey"));
       setUserInfo(userObj);
       setRefreshToken(localStorage.getItem("refreshTokenKey"));
       setTokenTimeout(localStorage.getItem("tokenTimeoutKey"));
     }
+
     if (!userToken && token) {
-      // console.log(
-      //   "%c Setting localStorage ",
-      //   "background: #000; color: #bada55"
-      // );
       setUserToken(token);
       localStorage.setItem("userTokenKey", token);
 
@@ -95,15 +82,18 @@ export default function UserProvider(props) {
 
       setRefreshToken(refresh);
       localStorage.setItem("refreshTokenKey", refresh);
-      //console.log("refresh token set to: ", refresh);
 
-      //const spotify = new SpotifyWebApi();
       spotify.setAccessToken(token);
       spotify.getMe().then((user) => {
         setUserInfo(user);
         localStorage.setItem("userInfoKey", JSON.stringify(user));
       });
       history.push("/");
+    }
+
+    if (token === null) {
+      console.error("Error getting access token! Redirected to login.");
+      history.push("/login");
     }
   });
 

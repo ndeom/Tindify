@@ -46,7 +46,7 @@ export default function CategoryRoute(props) {
 
             if (playlists.total > playlists.limit) {
               setMorePlaylists(true);
-              setOffset(playlists.items.length - 1);
+              setOffset(playlists.items.length);
             }
           } else {
             setLoading(false);
@@ -89,7 +89,7 @@ export default function CategoryRoute(props) {
           setCurrentPlaylists(combinedPlaylists);
           setLoading(false);
           if (offset + playlists.limit < playlists.total) {
-            setOffset(combinedPlaylists.length - 1);
+            setOffset(combinedPlaylists.length);
           } else {
             setMorePlaylists(false);
           }

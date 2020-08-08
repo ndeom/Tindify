@@ -36,8 +36,11 @@ export default function Card({
 
   const [hasPremium] = useState(userInfo.product === "premium");
 
+  //Check added due to some tracks missing "artist" field
   const [artists] = useState(
-    track.track.artists.map((artist) => artist.name).join(", ") || ""
+    track.track.artists
+      ? track.track.artists.map((artist) => artist.name).join(", ")
+      : ""
   );
   const [song] = useState(track.track.name || "");
   const [trackLength] = useState(track.track.duration_ms);

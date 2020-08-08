@@ -65,6 +65,7 @@ $text-grey: #b0b0b0;
 @media only screen and (max-width: 600px) {
   #application-header {
     padding: 14px 16px;
+    align-items: center;
     #button-container {
       .nav-chip {
         display: none;
