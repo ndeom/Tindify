@@ -39,10 +39,6 @@ app
   .use(cors())
   .use(cookieParser());
 
-app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
-
 app.get("/api/login", function (req, res) {
   console.log("entered login route");
   const state = generateRandomString(16);
@@ -62,7 +58,7 @@ app.get("/api/login", function (req, res) {
   );
 });
 
-app.get("/callback", function (req, res) {
+app.get("/api/callback", function (req, res) {
   const code = req.query.code || null;
   const state = req.query.state || null;
   const storedState = req.cookies ? req.cookies[stateKey] : null;
@@ -127,7 +123,7 @@ app.get("/callback", function (req, res) {
   }
 });
 
-app.get("/refresh_token", function (req, res) {
+app.get("/api/refresh_token", function (req, res) {
   console.log("Entered the refresh route");
   // requesting access token from refresh token
   const refresh_token = req.query.refresh_token;
@@ -154,6 +150,10 @@ app.get("/refresh_token", function (req, res) {
       });
     }
   });
+});
+
+app.get("*", function (req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 app.listen(port);

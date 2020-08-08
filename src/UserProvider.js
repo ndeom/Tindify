@@ -37,7 +37,7 @@ export default function UserProvider(props) {
       //unavailable for some reason.
       const refresh_token = localStorage.getItem("refreshTokenKey");
       const response = await fetch(
-        "http://localhost:8888/refresh_token?" +
+        "https://tindify-web.herokuapp.com/api/refresh_token?" +
           querystring.stringify({ refresh_token })
       );
       const newToken = await response.json();
