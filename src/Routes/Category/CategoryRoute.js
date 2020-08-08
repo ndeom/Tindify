@@ -100,9 +100,11 @@ export default function CategoryRoute(props) {
     }
   });
 
+  //console.log("location: ", location);
+
   return (
     <div id="category-route">
-      <RouteHeader title={location.state.categoryTitle} />
+      <RouteHeader title={location && location.state.categoryTitle} />
       <section className="playlist-section" aria-label="Browse playlists">
         <div id="playlists">
           {!!currentPlaylists.length &&

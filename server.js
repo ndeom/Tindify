@@ -38,11 +38,11 @@ app
   .use(cors())
   .use(cookieParser());
 
-app.get("/*", function (req, res) {
+app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-app.get("/login", function (req, res) {
+app.get("/api/login", function (req, res) {
   console.log("entered login route");
   const state = generateRandomString(16);
   res.cookie(stateKey, state);

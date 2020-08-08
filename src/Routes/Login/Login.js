@@ -5,7 +5,10 @@ export default function Login() {
   return (
     <div id="login">
       <h1>Tindify</h1>
-      <a href="http://localhost:8888/login"> Sign in with Spotify </a>
+      <a href="https://tindify-web.herokuapp.com/api/login">
+        {" "}
+        Sign in with Spotify{" "}
+      </a>
     </div>
   );
 }
