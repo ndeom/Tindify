@@ -91,7 +91,7 @@ export default function UserProvider(props) {
       history.push("/");
     }
 
-    if (token === null) {
+    if (!userToken && token === null) {
       console.error("Error getting access token! Redirected to login.");
       history.push("/login");
     }
