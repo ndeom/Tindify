@@ -95,7 +95,17 @@ export default function UserProvider(props) {
       console.error("Error getting access token! Redirected to login.");
       history.push("/login");
     }
-  });
+  }, [
+    history,
+    refresh,
+    setRefreshToken,
+    setTokenTimeout,
+    setUserInfo,
+    setUserToken,
+    spotify,
+    token,
+    userToken,
+  ]);
 
   return (
     <userContext.Provider

@@ -21,6 +21,7 @@ $menu-font: #b3b3b3;
   cursor: pointer;
   outline: none;
   opacity: 0.95;
+  z-index: 150;
 
   &.active {
     background-color: $lighter-black;
@@ -89,7 +90,6 @@ $menu-font: #b3b3b3;
     list-style: none;
     margin: 0;
     padding: 0;
-    z-index: 150;
 
     li {
       font-family: "Nunito Sans", sans-serif;

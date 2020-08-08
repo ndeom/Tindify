@@ -42,6 +42,8 @@ export default function Card({
       ? track.track.artists.map((artist) => artist.name).join(", ")
       : ""
   );
+  console.log("track", track);
+  console.log("track.track", track.track);
   const [song] = useState(track.track.name || "");
   const [trackLength] = useState(track.track.duration_ms);
   const [primaryColor] = useState(track.primary_color || "#282828");
