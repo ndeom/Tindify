@@ -41,24 +41,30 @@ export default function Card({
 
   //Check had to be added due to some results not containing track data
   const [artists] = useState(
-    track.track
+    track.track !== null
       ? track.track.artists.map((artist) => artist.name).join(", ")
       : ""
   );
 
-  const [song] = useState(track.track ? track.track.track.name : "");
-  const [trackLength] = useState(track.track ? track.track.duration_ms : 0);
-  const [primaryColor] = useState(track.primary_color || "#282828");
-  const [albumArtArray] = useState(track.track ? track.track.album.images : []);
-  const [album] = useState(track.track ? track.track.album.name : "");
-  const [uri] = useState(track.track ? track.track.uri : "");
+  const [song] = useState(track.track !== null ? track.track.track.name : "");
+  const [trackLength] = useState(
+    track.track !== null ? track.track.duration_ms : 0
+  );
+  const [primaryColor] = useState(track.track !== null || "#282828");
+  const [albumArtArray] = useState(
+    track.track !== null ? track.track.album.images : []
+  );
+  const [album] = useState(track.track !== null ? track.track.album.name : "");
+  const [uri] = useState(track.track !== null ? track.track.uri : "");
 
   const playbackState = useRef({
     elapsed: 0,
     remaining: hasPremium ? trackLength : 30000,
   });
 
-  const [hasPreview] = useState(track.track ? track.track.preview_url : "");
+  const [hasPreview] = useState(
+    track.track !== null ? track.track.preview_url : ""
+  );
   const [previewLoading, setPreviewLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [songStarted, setSongStarted] = useState(false);
