@@ -6,30 +6,12 @@ $green-light-back: #1aa34a;
 $green-dark-back: #1db954;
 
 .category {
-  /*background-color: $lighter-black;*/
-  //width: 200px;
-  //min-height: 200px;
   width: 100%;
   height: 100%;
   border-radius: 8px;
-  //justify-self: center;
-  //align-self: center;
-  //margin: 12px;
   position: relative;
   cursor: pointer;
   box-sizing: border-box;
-
-  // #playlists {
-  //   position: relative;
-  //   #no-data-warning {
-  //     width: 100%;
-  //     height: 100%;
-  //     display: flex;
-  //     justify-content: center;
-  //     align-items: center;
-  //     color: white;
-  //   }
-  // }
 
   .gradient {
     position: absolute;
@@ -37,6 +19,7 @@ $green-dark-back: #1db954;
     height: 100%;
     width: 100%;
     overflow: hidden;
+    border-radius: 8px;
 
     .category-title {
       color: white;
@@ -58,6 +41,41 @@ $green-dark-back: #1db954;
       right: 0;
       transform: rotate(25deg) translate(18%, -2%);
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .category {
+    border-radius: 4px;
+
+    .gradient {
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      //flex-direction: row-reverse;
+
+      .category-title {
+        position: relative;
+        color: white;
+        padding: 0.5rem;
+        margin: 0;
+        font-family: "Nunito Sans", sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 1.3em;
+        z-index: 1;
+        order: 2;
+      }
+
+      .category-image {
+        position: relative;
+        width: 70px;
+        height: 70px;
+        transform: rotate(0deg) translate(0%, 0%);
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
+        order: 1;
+      }
     }
   }
 }

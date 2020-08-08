@@ -7,32 +7,17 @@ import Swipe from "./Routes/Swipe/Swipe";
 import ApplicationHeader from "./Components/ApplicationHeader/ApplicationHeader";
 import CategoryRoute from "./Routes/Category/CategoryRoute";
 import TindifyPlaylist from "./Routes/TindifyPlaylist/TindifyPlaylist";
+import MobileFooter from "./Components/MobileFooter/MobileFooter";
 import { userContext } from "./UserProvider";
 import "./App.scss";
-import SpotifyWebApi from "spotify-web-api-js";
+//import SpotifyWebApi from "spotify-web-api-js";
 
 export const cancelAudioContext = React.createContext({});
 
 function App() {
-  const { userToken, userInfo, previewAudio } = useContext(userContext);
+  const { userToken } = useContext(userContext);
   const [cancelAudio, setCancelAudio] = useState(false);
   const [activeAudio, setActiveAudio] = useState(false);
-  //const [hasPremium] = useState(userInfo.product === "premium");
-
-  //Need to finish moving everything from Deck and Card
-  // useEffect(() => {
-  //   if (cancelAudio && !hasPremium) {
-  //     previewAudio.pause();
-  //     setActiveAudio(false);
-  //   }
-
-  //   if (cancelAudio && hasPremium) {
-  //     const spotify = new SpotifyWebApi();
-  //     spotify.setAccessToken(userToken);
-  //     spotify.pause();
-  //     setActiveAudio(false);
-  //   }
-  // });
 
   return (
     <cancelAudioContext.Provider
@@ -41,7 +26,6 @@ function App() {
         setCancelAudio,
         activeAudio,
         setActiveAudio,
-        //hasPremium,
       }}
     >
       <Switch>
@@ -55,11 +39,13 @@ function App() {
           <ScrollToTop />
           <ApplicationHeader />
           <Browse />
+          <MobileFooter />
         </Route>
         <Route path="/mytindify">
           <ScrollToTop />
           <ApplicationHeader />
           <TindifyPlaylist />
+          <MobileFooter />
         </Route>
         <Route path="/:category/swipe/:playlist">
           <ScrollToTop />
@@ -67,11 +53,13 @@ function App() {
           <RecoilRoot>
             <Swipe />
           </RecoilRoot>
+          <MobileFooter />
         </Route>
         <Route path="/:category">
           <ScrollToTop />
           <ApplicationHeader />
           <CategoryRoute />
+          <MobileFooter />
         </Route>
       </Switch>
     </cancelAudioContext.Provider>

@@ -45,12 +45,29 @@ $text-grey: #b0b0b0;
       outline: none;
       text-decoration: none;
 
+      .icon {
+        margin-right: 6px;
+        width: 20px;
+        height: auto;
+      }
+
       &.active {
         color: white;
       }
 
       &:hover {
         color: white;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #application-header {
+    padding: 14px 16px;
+    #button-container {
+      .nav-chip {
+        display: none;
       }
     }
   }

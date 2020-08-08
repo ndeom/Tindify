@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { userContext } from "../../../UserProvider";
 import { cancelAudioContext } from "../../../App";
 import { ReactComponent as PlayButton } from "../../Images/circular.svg";
-//import { ReactComponent as Dislike } from "../../Images/DislikeButton.svg";
 import LikeButton from "./LikeButton/LikeButton";
 import DislikeButton from "./DislikeButton/DislikeButton";
 import { ReactComponent as Pause } from "../../Images/pause.svg";
@@ -17,8 +16,9 @@ export default function ButtonControls({
   gone,
   i,
   hasPremium,
-  //previewAudio,
   handleLikeOrDislike,
+  noPreviewWarning,
+  noDeviceWarning,
 }) {
   const { setActiveAudio } = useContext(cancelAudioContext);
   const { spotify, previewAudio } = useContext(userContext);
@@ -41,18 +41,10 @@ export default function ButtonControls({
       }
     } else {
       if (isPlaying) {
-        previewAudio
-          .pause()
-          .catch((err) =>
-            console.error("Error toggling preview play state", err)
-          );
+        previewAudio.pause();
         setActiveAudio(false);
       } else {
-        previewAudio
-          .play()
-          .catch((err) =>
-            console.error("Error toggling preview play state", err)
-          );
+        previewAudio.play();
         setActiveAudio(true);
       }
     }
@@ -73,7 +65,12 @@ export default function ButtonControls({
       >
         <DislikeButton primaryColor={primaryColor} />
       </button>
-      <button id="play-button" onClick={() => togglePlayState()}>
+      <button
+        id="play-button"
+        className={`${noPreviewWarning || noDeviceWarning ? "disabled" : ""}`}
+        disabled={noPreviewWarning || noDeviceWarning}
+        onClick={() => togglePlayState()}
+      >
         {!isPlaying && <PlayButton />}
         {isPlaying && <Pause />}
       </button>

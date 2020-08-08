@@ -11,7 +11,6 @@ export default function TimeBar({
   isPlaying,
   playbackState,
   hasPremium,
-  //previewAudio,
   songEnded,
   setSongEnded,
   currentIndex,
@@ -75,15 +74,6 @@ export default function TimeBar({
       setTime({ ...time, ...updatedTime });
       playbackState.current = { ...playbackState.current, ...updatedTime };
     };
-
-    // console.log(
-    //   "TimeBar, isPlaying: ",
-    //   isPlaying,
-    //   "songEnded: ",
-    //   songEnded,
-    //   "currentIndex: ",
-    //   currentIndex
-    // );
 
     if (isPlaying && !songEnded) {
       let timeout = window.setTimeout(() => {

@@ -5,7 +5,7 @@ $green-light-back: #1aa34a;
 $green-dark-back: #1db954;
 
 #login {
-  background-color: $light-black;
+  //background-color: $light-black;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -35,6 +35,14 @@ $green-dark-back: #1db954;
 
     &:hover {
       filter: brightness(1.1);
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  #login {
+    h1 {
+      margin-bottom: 50px;
     }
   }
 }

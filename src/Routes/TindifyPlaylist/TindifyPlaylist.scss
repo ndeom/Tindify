@@ -18,7 +18,7 @@ $text-grey: #b0b0b0;
     background-color: $lighter-black;
     display: flex;
     border-radius: 4px;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.4);
     z-index: 1;
     list-style-type: none;
     margin: 0;
@@ -45,20 +45,6 @@ $text-grey: #b0b0b0;
 
   .route-header {
     color: white;
-  }
-
-  .tooltip {
-    background-color: white;
-    font-size: 12px;
-    color: black;
-    visibility: hidden;
-    display: flex;
-    position: absolute;
-    padding: 2px;
-
-    &.visible {
-      visibility: visible;
-    }
   }
 
   #tindify-header {
@@ -101,6 +87,7 @@ $text-grey: #b0b0b0;
       font-family: "Nunito Sans", sans-serif;
       padding: 30px 30px 0 30px;
       margin: 0;
+      line-height: 1;
     }
   }
 
@@ -203,13 +190,19 @@ $text-grey: #b0b0b0;
           }
         }
 
+        .artist-album-small-screen {
+          display: none;
+        }
+
         .playlist-song-title,
         .playlist-artist,
-        .playlist-album,
-        .playlist-date-added {
+        .playlist-album {
+          width: 90%;
           justify-self: flex-start;
           align-self: center;
           white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
           color: white;
         }
 
@@ -221,6 +214,7 @@ $text-grey: #b0b0b0;
         .playlist-album,
         .playlist-date-added {
           color: lightgrey;
+          align-self: center;
         }
 
         .more {
@@ -318,5 +312,172 @@ $text-grey: #b0b0b0;
   #no-playlist-warning {
     width: 100%;
     height: 100%;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  #tindify-playlist-container {
+    .more-menu {
+      li {
+        &:hover {
+          background-color: $lighter-black;
+        }
+      }
+    }
+
+    #tindify-playlist {
+      ul {
+        #title-row {
+          display: none;
+        }
+
+        .playlist-row {
+          padding: 0px;
+          grid-template-columns: 90% 10%;
+          grid-template-rows: 50% 50%;
+          border-bottom: none;
+          margin: 12px 0;
+
+          &:hover {
+            background-color: rgba(0, 0, 0, 0);
+            & .more {
+              visibility: visible;
+            }
+          }
+
+          .artist-album-small-screen {
+            display: flex;
+            grid-column: 1 / 2;
+            grid-row: 2 / 3;
+            color: $text-grey;
+            font-weight: 500;
+            font-size: 14px;
+            width: 95%;
+            //overflow: hidden;
+            // text-overflow: ellipsis;
+            // white-space: nowrap;
+
+            .separator {
+              color: $text-grey;
+              padding: 0 8px;
+              transform: translateY(-3px);
+            }
+
+            .playlist-album-small-screen,
+            .playlist-artist-small-screen {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+          }
+
+          .playlist-song-title {
+            grid-column: 1 / 2;
+            grid-row: 1 / 2;
+          }
+
+          .playlist-artist {
+            display: none;
+          }
+
+          .playlist-album {
+            display: none;
+          }
+
+          .playlist-date-added {
+            display: none;
+          }
+
+          .more {
+            grid-column: 2 / 3;
+            grid-row: 1 / 3;
+            visibility: visible;
+          }
+        }
+      }
+
+      #exit-playlist {
+        background-color: $lighter-black;
+        position: absolute;
+        right: 24px;
+        top: 24px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        z-index: 10;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+
+        &:hover {
+          filter: brightness(2);
+        }
+      }
+
+      #no-playlist-warning {
+        margin-top: 60px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        #line-1 {
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #tindify-playlist-container {
+    #tindify-header {
+      padding: 30px 16px;
+
+      h1 {
+        font-size: 48px;
+        font-weight: 900;
+        font-family: "Nunito Sans", sans-serif;
+        padding: 30px 30px 0 30px;
+        margin: 0;
+      }
+    }
+
+    #tindify-playlist {
+      padding: 0 16px;
+
+      &:after {
+      }
+
+      #tindify-playlist-title {
+      }
+
+      ul {
+        #title-row {
+          display: none;
+        }
+      }
+
+      #exit-playlist {
+        background-color: $lighter-black;
+        position: absolute;
+        right: 24px;
+        top: 24px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        z-index: 10;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+
+        &:hover {
+          filter: brightness(2);
+        }
+      }
+    }
   }
 }

@@ -2,19 +2,14 @@ import React, { useState } from "react";
 import { useTransition, animated } from "react-spring";
 import "./NoPreviewWarning.scss";
 
-export default function NoPreviewWarning({
-  noPreviewWarning,
-  setNoPreviewWarning,
-  currentIndex,
-  index,
-}) {
+export default function NoPreviewWarning({ noPreviewWarning }) {
   const [toggled] = useState(noPreviewWarning);
 
-  console.log(
-    "%c no preview warning",
-    "background: #000; color: red; font-size: 24px;",
-    noPreviewWarning
-  );
+  // console.log(
+  //   "%c no preview warning",
+  //   "background: #000; color: red; font-size: 24px;",
+  //   noPreviewWarning
+  // );
   // console.log("current index: ", currentIndex);
   // console.log("card index: ", index);
 

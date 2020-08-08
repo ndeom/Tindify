@@ -40,7 +40,7 @@ export default function Swipe() {
       spotify
         .getPlaylistTracks(playlistId)
         .then((tracks) => {
-          console.log("Tracks", tracks);
+          //console.log("Tracks", tracks);
           setCurrentTracks(tracks.items);
         })
         .catch((err) => console.error("Error getting playlist tracks!", err));

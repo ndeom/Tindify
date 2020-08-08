@@ -20,6 +20,11 @@
     &:hover {
       transform: scale(1.1);
     }
+
+    &.disabled {
+      cursor: not-allowed;
+    }
+
     svg {
       fill: white;
       height: 51px;

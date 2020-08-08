@@ -2,10 +2,10 @@ import React, { useState, useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Category.scss";
 
-export default function Category(props) {
+export default function Category({ info, getTooltipMouseProps }) {
   const [categoryColor, setCategoryColor] = useState("");
-  const pathname = `/${props.info.id}`;
-  const categoryTitle = props.info.name;
+  const pathname = `/${info.id}`;
+  const categoryTitle = info.name;
 
   useLayoutEffect(() => {
     if (!categoryColor) {
@@ -24,13 +24,14 @@ export default function Category(props) {
       }}
       className="category"
       style={{ backgroundColor: categoryColor }}
+      {...getTooltipMouseProps({ displayedText: categoryTitle })}
     >
       <div className="gradient">
         <h3 className="category-title">{`${breakAtSlash(categoryTitle)}`}</h3>
         <img
           className="category-image"
           alt="Category"
-          src={`${props.info.icons[0].url}`}
+          src={`${info.icons[0].url}`}
         />
       </div>
     </Link>

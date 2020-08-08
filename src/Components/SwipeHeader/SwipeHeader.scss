@@ -21,7 +21,58 @@ $green-dark-back: #1db954;
       font-family: "Nunito Sans", sans-serif;
       font-weight: 900;
       font-size: 96px;
-      padding: 36px 72px 0 72px;
+      padding: 36px 72px 20px 72px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .swipe-header {
+    padding-top: 60px;
+    .header-gradient {
+      h1 {
+        font-size: 64px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .swipe-header {
+    padding-top: 60px;
+    .header-gradient {
+      h1 {
+        padding: 16px 72px 20px 16px;
+        font-size: 40px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 330px) {
+  .swipe-header {
+    padding-top: 60px;
+    .header-gradient {
+      h1 {
+        padding: 16px 72px 20px 16px;
+        font-size: 40px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-height: 700px) {
+  .swipe-header {
+    padding-top: 50px;
+    .header-gradient {
+      h1 {
+        padding: 0px 72px 0px 16px;
+        font-size: 24px;
+        display: none;
+      }
     }
   }
 }

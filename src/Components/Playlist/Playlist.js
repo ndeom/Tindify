@@ -1,53 +1,25 @@
-import React, { useState, useLayoutEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "./Playlist.scss";
 
-export default function Playlist({ currCategory, info, history }) {
-  const [playlistColor, setPlaylistColor] = useState("");
-
-  //Generates a random color for each playlist tile
-  const backgroundColor = `rgb(
-    ${getRandomNum()},
-    ${getRandomNum()},
-    ${getRandomNum()}
-    )`;
-
+export default function Playlist({ currCategory, info, getTooltipMouseProps }) {
   const { name: playlistTitle, id: playlistId, images } = info;
   const pathname = `/${currCategory}/swipe/${playlistTitle}`;
-
-  useLayoutEffect(() => {
-    if (!playlistColor) {
-      setPlaylistColor(backgroundColor);
-    }
-  }, [backgroundColor, playlistColor]);
 
   return (
     <Link
       to={{
         pathname: pathname,
         state: {
-          playlistColor,
           playlistTitle,
           playlistId,
           currCategory,
         },
       }}
       className="playlist"
-      style={{ backgroundColor: playlistColor }}
+      {...getTooltipMouseProps({ displayedText: playlistTitle })}
     >
-      {/* <div className="gradient">
-        <h3 className="playlist-title">{`${playlistTitle}`}</h3>
-        <img
-          className="playlist-image"
-          alt="Playlist"
-          src={`${images[0].url}`}
-        />
-      </div> */}
       <img className="playlist-image" alt="Playlist" src={`${images[0].url}`} />
     </Link>
   );
-}
-
-function getRandomNum() {
-  return Math.floor(Math.random() * 255);
 }

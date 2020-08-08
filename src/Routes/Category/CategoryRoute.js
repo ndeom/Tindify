@@ -3,8 +3,10 @@ import { useHistory, useParams, useLocation } from "react-router-dom";
 import Playlist from "../../Components/Playlist/Playlist";
 import RouteHeader from "../../Components/RouteHeader/RouteHeader";
 import Loading from "../../Components/Loading/Loading";
+import Tooltip from "../../Components/Tooltip/Tooltip";
 import { userContext } from "../../UserProvider";
 import { useScrollPosition } from "../../utils/useScrollPosition";
+import useTooltip from "../../utils/useTooltip";
 import "./CategoryRoute.scss";
 import SpotifyWebApi from "spotify-web-api-js";
 
@@ -22,15 +24,22 @@ export default function CategoryRoute(props) {
   const currentDate = new Date();
   const needNewToken = tokenTimeout < currentDate.getTime();
 
-  useEffect(() => {
-    if (!currentPlaylists.length && !needNewToken) {
-      const spotify = new SpotifyWebApi();
+  const {
+    tooltipPosition,
+    tooltipBody,
+    getTooltipMouseProps,
+    showTooltip,
+  } = useTooltip();
 
+  useEffect(() => {
+    if (!currentPlaylists.length && !needNewToken && !noReturnedPlaylists) {
+      const spotify = new SpotifyWebApi();
+      setLoading(true);
       spotify.setAccessToken(userToken);
       spotify
         .getCategoryPlaylists(currCategory, { limit: 50 })
         .then(({ playlists }) => {
-          console.log("playlists", playlists);
+          //console.log("playlists", playlists);
 
           if (playlists.items.length) {
             setCurrentPlaylists(playlists.items);
@@ -40,22 +49,32 @@ export default function CategoryRoute(props) {
               setOffset(playlists.items.length - 1);
             }
           } else {
+            setLoading(false);
             setReturnedNoPlaylists(true);
           }
         })
         .catch((err) => {
+          setLoading(false);
           console.error("Error getting category playlists!", err);
         });
     }
 
+    if (currentPlaylists.length && loading) setLoading(false);
+
     if (needNewToken) {
       getNewToken();
     }
-  });
+  }, [
+    currCategory,
+    currentPlaylists.length,
+    getNewToken,
+    loading,
+    needNewToken,
+    noReturnedPlaylists,
+    userToken,
+  ]);
 
-  useScrollPosition(({ prevPos, currPos }) => {
-    //console.log("currPos: ", currPos);
-    //console.log("window", window.innerHeight);
+  useScrollPosition(({ currPos }) => {
     const documentHeight = document.body.clientHeight;
     const scrolledToBottom =
       -1 * currPos.y + window.innerHeight === documentHeight;
@@ -93,6 +112,7 @@ export default function CategoryRoute(props) {
                 currCategory={currCategory}
                 info={playlist}
                 history={history}
+                getTooltipMouseProps={getTooltipMouseProps}
               />
             ))}
           {!!loading && <Loading />}
@@ -108,6 +128,11 @@ export default function CategoryRoute(props) {
           )}
         </div>
       </section>
+      <Tooltip
+        position={tooltipPosition.current}
+        visible={showTooltip}
+        body={tooltipBody.current}
+      />
     </div>
   );
 }

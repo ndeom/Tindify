@@ -88,32 +88,18 @@ export default function Deck({
       const { items: tindifyTracks } = await spotify.getPlaylistTracks(
         playlistId
       );
-      // console.log("response: ", response);
-      // const tracks = response.items;
-      //console.log("tracks: ", tindifyTracks);
 
       //Check if track is already in playlist. If not, add to playlist.
-      console.log("currentIndices[0]", currentIndices[0]);
       const currentTrackUri = tracks[currentIndices[0]].track.uri;
-      console.log("curren track: ", tracks[currentIndices[0]]);
-
-      //console.log("track", tracks[currentIndices[0]]);
-
-      console.log("currentTrackUri", currentTrackUri);
 
       const filtered = tindifyTracks.filter((track) => {
-        console.log("track.track.uri: ", track.track.uri);
-        console.log("currentTrackUri: ", currentTrackUri);
         return track.track.uri === currentTrackUri;
       });
-
-      console.log("filtered: ", filtered);
 
       if (!filtered.length) {
         const updatedPlaylist = await spotify.addTracksToPlaylist(playlistId, [
           currentTrackUri,
         ]);
-        console.log("udpatedPlaylist: ", updatedPlaylist);
       }
     } catch (error) {
       console.error("Error adding song to Tindify playlist!", error);
@@ -125,22 +111,22 @@ export default function Deck({
     removeNoDeviceWarning();
     setTimeout(() => {
       if (lastCard) {
-        console.log("lastCard set indices");
+        //console.log("lastCard set indices");
         setCurrentIndices([]);
       } else if (secondToLastCard) {
-        console.log("second to last set indices");
+        //console.log("second to last set indices");
         setCurrentIndices([currentIndices[0] + 1]);
       } else {
-        console.log("regular set indices");
+        //console.log("regular set indices");
         setCurrentIndices([currentIndices[0] + 1, currentIndices[1] + 1]);
       }
 
-      console.log(
-        "index changed at: ",
-        Date.now(),
-        "index is: ",
-        currentIndices[0]
-      );
+      // console.log(
+      //   "index changed at: ",
+      //   Date.now(),
+      //   "index is: ",
+      //   currentIndices[0]
+      // );
       gone.clear();
     }, 200);
   };
@@ -219,9 +205,9 @@ export default function Deck({
           scale,
           delay: undefined,
           config: {
-            friction: 50,
+            friction: 14,
             rot,
-            tension: down ? 500 : isGone ? 200 : 500,
+            tension: 120, //down ? 500 : isGone ? 200 : 500,
           },
         };
       });
@@ -253,7 +239,9 @@ export default function Deck({
           >
             <Card
               previewAudio={previewAudio}
+              noPreviewWarning={noPreviewWarning}
               setNoPreviewWarning={setNoPreviewWarning}
+              noDeviceWarning={noDeviceWarning}
               setNoDeviceWarning={setNoDeviceWarning}
               currentIndex={currentIndices[0]}
               gone={gone}
@@ -295,7 +283,9 @@ export default function Deck({
             <Card
               //spotify={spotify}
               previewAudio={previewAudio}
+              noPreviewWarning={noPreviewWarning}
               setNoPreviewWarning={setNoPreviewWarning}
+              noDeviceWarning={noDeviceWarning}
               setNoDeviceWarning={setNoDeviceWarning}
               currentIndex={currentIndices[0]}
               gone={gone}

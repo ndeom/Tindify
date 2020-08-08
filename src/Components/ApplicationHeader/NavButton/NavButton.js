@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-//import SpotifyWebApi from "spotify-web-api-js";
 import { useHistory } from "react-router-dom";
 import { userContext } from "../../../UserProvider";
 import { cancelAudioContext } from "../../../App";
@@ -32,10 +31,8 @@ export default function NavButton({ direction }) {
         }
 
         if (direction === "back") {
-          //if (activeAudio) setCancelAudio(true);
           history.goBack();
         } else {
-          //if (activeAudio) setCancelAudio(true);
           history.goForward();
         }
       }}

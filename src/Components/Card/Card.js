@@ -23,10 +23,11 @@ export default function Card({
   zIndex,
   gone,
   currentIndex,
+  noPreviewWarning,
   setNoPreviewWarning,
+  noDeviceWarning,
   setNoDeviceWarning,
   handleLikeOrDislike,
-  //previewAudio,
 }) {
   const { userToken, userInfo, previewAudio } = useContext(userContext);
   const { cancelAudio, setCancelAudio, setActiveAudio } = useContext(
@@ -56,37 +57,15 @@ export default function Card({
   const [songStarted, setSongStarted] = useState(false);
   const [songEnded, setSongEnded] = useState(false);
 
-  //Cancels audio for both premium and regular users on unmount
-  // useEffect(() => {
-  //   const spotify = new SpotifyWebApi();
-  //   spotify.setAccessToken(userToken);
-
-  //   if (cancelAudio && !hasPremium) {
-  //     previewAudio.pause();
-  //     setActiveAudio(false);
-  //   }
-
-  //   if (cancelAudio && hasPremium) {
-  //     spotify
-  //       .pause()
-  //       .then(() => console.log("PAUSED"))
-  //       .catch((err) => console.error("Error in cleanup function!", err));
-  //     setActiveAudio(false);
-  //     console.log("spotify paused after unmount");
-  //   }
-  // }, [cancelAudio, hasPremium, previewAudio, setActiveAudio, uri, userToken]);
-
   //Handles event listeners for previewAudio
   useEffect(() => {
     const isCurrentIndex = currentIndex === i;
     if (!isCurrentIndex) return;
 
-    console.log("Event listeners added to index", currentIndex);
     previewAudio.addEventListener("loadeddata", () => setPreviewLoading(false));
     previewAudio.addEventListener("ended", () => setSongEnded(true));
 
     return () => {
-      console.log("Event listeners removed from index", currentIndex);
       previewAudio.removeEventListener("loadeddata", () =>
         setPreviewLoading(false)
       );
@@ -116,17 +95,17 @@ export default function Card({
     };
 
     if (hasPreview && previewLoading) {
-      console.log("Loading preview audio, index:", currentIndex);
+      //console.log("Loading preview audio, index:", currentIndex);
       loadPreviewAudio();
     }
 
     if (hasPreview && !previewLoading) {
-      console.log("Starting preview playback, index: ", currentIndex);
+      //console.log("Starting preview playback, index: ", currentIndex);
       startPreviewPlayback();
     }
 
     if (!hasPreview) {
-      console.log("There isn't a preview, index: ", currentIndex);
+      //console.log("There isn't a preview, index: ", currentIndex);
       setNoPreviewWarning(true);
     }
   }, [
@@ -154,7 +133,7 @@ export default function Card({
       try {
         const spotify = new SpotifyWebApi();
         spotify.setAccessToken(userToken);
-        console.log("Checking for active devices");
+        //console.log("Checking for active devices");
 
         const devices = await spotify.getMyDevices();
         return devices;
@@ -166,11 +145,6 @@ export default function Card({
     const startPremiumPlayback = async () => {
       try {
         const { devices } = await checkForActiveDevices();
-
-        console.log("Active devices: ", devices);
-        console.log("cancelAudio: ", cancelAudio);
-        console.log("isPlaying: ", isPlaying, "index: ", currentIndex);
-        //console.log("Current spotify object: ", spotify);
 
         if (cancelAudio) {
           setCancelAudio(false);
@@ -238,27 +212,24 @@ export default function Card({
       <TimeBar
         trackLength={trackLength}
         isPlaying={isPlaying}
-        setIsPlaying={setIsPlaying}
         playbackState={playbackState}
-        i={i}
         currentIndex={currentIndex}
         hasPremium={hasPremium}
-        previewAudio={previewAudio}
         songEnded={songEnded}
         setSongEnded={setSongEnded}
       />
       <ButtonControls
         primaryColor={primaryColor}
         uri={uri}
-        previewAudio={previewAudio}
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}
         playbackState={playbackState}
         gone={gone}
         i={i}
         handleLikeOrDislike={handleLikeOrDislike}
-        currentIndex={currentIndex}
         hasPremium={hasPremium}
+        noPreviewWarning={noPreviewWarning}
+        noDeviceWarning={noDeviceWarning}
       />
     </animated.div>
   );
@@ -299,7 +270,6 @@ function FadedEdges({ containerClass, children, primaryColor }) {
       .getBoundingClientRect();
 
     if (element.width > 250) {
-      //console.log("width: ", element.width);
       setElementWidth(element.width);
       setScrollable(true);
     }

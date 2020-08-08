@@ -14,3 +14,15 @@ $green-dark-back: #1db954;
     padding: 36px 72px 0 72px;
   }
 }
+
+@media only screen and (max-width: 600px) {
+  .route-header {
+    h1 {
+      margin: 0;
+      font-family: "Nunito Sans", sans-serif;
+      font-weight: 900;
+      font-size: 36px;
+      padding: 36px 16px 0 16px;
+    }
+  }
+}

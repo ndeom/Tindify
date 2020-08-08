@@ -7,12 +7,13 @@ import React, {
 } from "react";
 import { Link } from "react-router-dom";
 import { userContext } from "../../UserProvider";
-import getTooltipMouseProps from "../../utils/getTooltipMouseProps";
 import Loading from "../../Components/Loading/Loading";
+import Tooltip from "../../Components/Tooltip/Tooltip";
 import { ReactComponent as More } from "../../Components/Images/more.svg";
 import { ReactComponent as Clock } from "../../Components/Images/clock.svg";
 import { ReactComponent as BeamNote } from "../../Components/Images/beamnote.svg";
 import SpotifyWebApi from "spotify-web-api-js";
+import useTooltip from "../../utils/useTooltip";
 import "./TindifyPlaylist.scss";
 
 export default function TindifyPlaylist() {
@@ -24,27 +25,18 @@ export default function TindifyPlaylist() {
   const [noPlaylist, setNoPlaylist] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [showTooltip, setShowTooltip] = useState(false);
-  const hovering = useRef(false);
-  const tooltipPosition = useRef({ x: 0, y: 0 });
-  const tooltipBody = useRef("");
+  //Hook for tooltip
+  const {
+    tooltipPosition,
+    tooltipBody,
+    getTooltipMouseProps,
+    showTooltip,
+  } = useTooltip();
 
   const [showMenu, setShowMenu] = useState(false);
   const clickRef = useRef(null);
   const [moreIndex, setMoreIndex] = useState(null);
   const morePosition = useRef({ x: 0, y: 0 });
-
-  const revealTooltip = (e) => {
-    setTimeout(() => {
-      if (hovering.current) {
-        setShowTooltip(true);
-      }
-    }, 1000);
-  };
-
-  const getXAndY = (e) => {
-    tooltipPosition.current = { x: e.pageX, y: e.pageY };
-  };
 
   const handleClick = (e) => {
     if (e.target.className === "more-menu-li") return;
@@ -79,6 +71,8 @@ export default function TindifyPlaylist() {
     }
   }, [moreIndex, playlist, playlistId, playlistSnapshot, userToken]);
 
+  //Add event listener to listen for clicks outside of MoreMenu.
+  //Hides menu when anything but MoreMenu is clicked.
   useEffect(() => {
     document.addEventListener("mousedown", handleClick);
 
@@ -98,7 +92,13 @@ export default function TindifyPlaylist() {
             (playlist) => playlist.name === "Tindify"
           )[0];
 
-          console.log("tindify: ", tindify);
+          //console.log("tindify: ", tindify);
+
+          if (!tindify) {
+            setLoading(false);
+            setNoPlaylist(true);
+            return;
+          }
 
           if (tindify.images.length) {
             setPlaylistCover(tindify.images[0].url);
@@ -121,7 +121,7 @@ export default function TindifyPlaylist() {
 
             setLoading(false);
 
-            console.log("tracks from playlist: ", tracks);
+            //console.log("tracks from playlist: ", tracks);
           });
         })
         .catch((err) => {
@@ -152,7 +152,7 @@ export default function TindifyPlaylist() {
             <BeamNote id="beam-note" />
           )}
         </div>
-        <h1>My Tindify</h1>
+        <h1>Tindify</h1>
       </div>
       <div id="tindify-playlist">
         <ul>
@@ -169,17 +169,10 @@ export default function TindifyPlaylist() {
               <PlaylistRow
                 key={`playlist-row-${i}`}
                 song={song}
-                hovering={hovering}
-                getXAndY={getXAndY}
-                tooltipBody={tooltipBody}
-                revealTooltip={revealTooltip}
-                setShowTooltip={setShowTooltip}
+                getTooltipMouseProps={getTooltipMouseProps}
                 showMenu={showMenu}
-                //setShowMenu={setShowMenu}
                 moreIndex={moreIndex}
                 i={i}
-                //morePosition={morePosition}
-                //handleClick={handleClick}
                 handleShowMenu={handleShowMenu}
               />
             ))}
@@ -214,76 +207,60 @@ export default function TindifyPlaylist() {
   );
 }
 
-function Tooltip({ position, visible, body }) {
-  return (
-    <div
-      className={`tooltip ${visible ? "visible" : ""}`}
-      style={{
-        left: position.x + "px",
-        top: position.y + 16 + "px",
-      }}
-    >
-      <div className="tooltip-arrow"></div>
-      <div className="tooltip-body">{`${body}`}</div>
-    </div>
-  );
-}
-
 function PlaylistRow({
   song,
-  hovering,
-  getXAndY,
-  tooltipBody,
-  revealTooltip,
-  setShowTooltip,
+  getTooltipMouseProps,
   showMenu,
   moreIndex,
   i,
   handleShowMenu,
 }) {
   const artists = song.track.artists.map((artist) => artist.name).join(", ");
-  //const [showMenu, setShowMenu] = useState(false);
 
   return (
     <li className="playlist-row">
       <span
         className="playlist-song-title"
         {...getTooltipMouseProps({
-          getXAndY,
-          hovering,
-          tooltipBody,
-          revealTooltip,
           displayedText: song.track.name,
-          setShowTooltip,
         })}
       >
-        {stringShortener(song.track.name)}
+        {song.track.name}
       </span>
       <span
         className="playlist-artist"
         {...getTooltipMouseProps({
-          getXAndY,
-          hovering,
-          tooltipBody,
-          revealTooltip,
           displayedText: artists,
-          setShowTooltip,
         })}
       >
-        {stringShortener(artists)}
+        {artists}
       </span>
       <span
         className="playlist-album"
         {...getTooltipMouseProps({
-          getXAndY,
-          hovering,
-          tooltipBody,
-          revealTooltip,
           displayedText: song.track.album.name,
-          setShowTooltip,
         })}
       >
-        {stringShortener(song.track.album.name)}
+        {song.track.album.name}
+      </span>
+      <span className="artist-album-small-screen">
+        <span
+          className="playlist-artist-small-screen"
+          {...getTooltipMouseProps({
+            displayedText: artists,
+          })}
+        >
+          {artists}
+        </span>
+        <span className="separator">.</span>
+        <span
+          className="playlist-album-small-screen"
+          {...getTooltipMouseProps({
+            displayedText: song.track.album.name,
+          })}
+        >
+          {song.track.album.name}
+        </span>
       </span>
       <span
         className={`more ${showMenu && moreIndex === i ? "active" : ""}`}
@@ -291,25 +268,18 @@ function PlaylistRow({
           handleShowMenu(e, i);
         }}
         {...getTooltipMouseProps({
-          getXAndY,
-          hovering,
-          tooltipBody,
-          revealTooltip,
           displayedText: "More",
-          setShowTooltip,
         })}
       >
         <More className="more-svg" />
-        {/* {!!showMenu && <MoreMenu />} */}
       </span>
-      {/* {!!showMenu && <MoreMenu morePosition={morePosition.current} />} */}
       <span className="playlist-date-added">{formatTime(song.added_at)}</span>
     </li>
   );
 }
 
 function MoreMenu({ morePosition, handleRemoveIndex, setShowMenu }) {
-  console.log("moreMenu position: ", morePosition);
+  //console.log("moreMenu position: ", morePosition);
   return (
     <ul
       className="more-menu"
@@ -359,6 +329,6 @@ function formatTime(time) {
   return `${Math.round(years)} years ago`;
 }
 
-function stringShortener(string) {
-  return string.length > 20 ? `${string.slice(0, 20)}...` : string;
-}
+// function stringShortener(string) {
+//   return string.length > 20 ? `${string.slice(0, 20)}...` : string;
+// }

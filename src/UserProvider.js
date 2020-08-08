@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import SpotifyWebApi from "spotify-web-api-js";
 import querystring from "querystring";
@@ -33,6 +33,8 @@ export default function UserProvider(props) {
 
   const getNewToken = async () => {
     try {
+      //Had to pull refresh token from storage. refreshToken value
+      //unavailable for some reason.
       const refresh_token = localStorage.getItem("refreshTokenKey");
       const response = await fetch(
         "http://localhost:8888/refresh_token?" +
@@ -69,10 +71,10 @@ export default function UserProvider(props) {
       //   "user token from storage: ",
       //   localStorage.getItem("userTokenKey")
       // );
-      console.log(
-        "%c Getting from localStorage ",
-        "background: #000; color: #bada55"
-      );
+      // console.log(
+      //   "%c Getting from localStorage ",
+      //   "background: #000; color: #bada55"
+      // );
       setUserToken(localStorage.getItem("userTokenKey"));
       let userObj = JSON.parse(localStorage.getItem("userInfoKey"));
       setUserInfo(userObj);
@@ -80,10 +82,10 @@ export default function UserProvider(props) {
       setTokenTimeout(localStorage.getItem("tokenTimeoutKey"));
     }
     if (!userToken && token) {
-      console.log(
-        "%c Setting localStorage ",
-        "background: #000; color: #bada55"
-      );
+      // console.log(
+      //   "%c Setting localStorage ",
+      //   "background: #000; color: #bada55"
+      // );
       setUserToken(token);
       localStorage.setItem("userTokenKey", token);
 
@@ -93,7 +95,7 @@ export default function UserProvider(props) {
 
       setRefreshToken(refresh);
       localStorage.setItem("refreshTokenKey", refresh);
-      console.log("refresh token set to: ", refresh);
+      //console.log("refresh token set to: ", refresh);
 
       //const spotify = new SpotifyWebApi();
       spotify.setAccessToken(token);
@@ -121,31 +123,3 @@ export default function UserProvider(props) {
     </userContext.Provider>
   );
 }
-
-// const getNewToken = async (refreshToken, setUserToken, setTokenTimeout) => {
-//   try {
-//     console.log("getting a new token");
-//     // console.log("userToken: ", userToken);
-//     console.log("refreshToken: ", refreshToken);
-//     // console.log(
-//     //   "refreshtoken from storage: ",
-//     //   localStorage.getItem("refreshTokenKey")
-//     // );
-
-//     const response = await fetch(
-//       querystring.stringify({ refresh_token: refreshToken })
-//     );
-
-//     console.log("response: ", response);
-//     const newToken = JSON.parse(response.body);
-//     console.log("newToken: ", newToken);
-//     setUserToken(newToken);
-//     localStorage.setItem("userTokenKey", newToken);
-//     let tokenTimeout = Date.now() + 3000 * 1000;
-//     console.log("token timeout: ", tokenTimeout);
-//     setTokenTimeout(tokenTimeout);
-//     localStorage.setItem("tokenTimeoutKey", tokenTimeout);
-//   } catch (error) {
-//     console.error("Error occurred while refreshing token: ", error);
-//   }
-// };

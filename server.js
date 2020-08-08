@@ -2,6 +2,8 @@ require("dotenv").config();
 const express = require("express"); // Express web server framework
 const request = require("request"); // "Request" library
 const cors = require("cors");
+const favicon = require("express-favicon");
+const path = require("path");
 const querystring = require("querystring");
 const cookieParser = require("cookie-parser");
 
@@ -29,10 +31,16 @@ const stateKey = "spotify_auth_state";
 
 const app = express();
 
+app.use(favicon(__dirname + "/build/favicon.ico"));
+app.use(express.static(__dirname));
 app
-  .use(express.static(__dirname + "/testpage"))
+  .use(express.static(path.join(__dirname, "build")))
   .use(cors())
   .use(cookieParser());
+
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 app.get("/login", function (req, res) {
   console.log("entered login route");

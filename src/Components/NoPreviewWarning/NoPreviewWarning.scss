@@ -8,7 +8,6 @@ $text-grey: #b3b3b3;
 
 #no-preview-warning {
   position: absolute;
-  z-index: 1;
   width: 268px;
   height: 100px;
   color: $text-grey;
@@ -17,6 +16,7 @@ $text-grey: #b3b3b3;
   border-radius: 10px;
   font-family: "Nunito Sans", sans-serif;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  z-index: 150;
 
   .warning-top-line {
     font-size: 20px;
@@ -37,6 +37,26 @@ $text-grey: #b3b3b3;
       &:hover {
         color: white;
       }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #no-preview-warning {
+    height: 70px;
+    margin-top: 30px;
+
+    .warning-top-line {
+      font-size: 16px;
+      display: block;
+
+      font-weight: 800;
+    }
+
+    .warning-body {
+      font-size: 13px;
+      font-weight: 600;
+      display: block;
     }
   }
 }

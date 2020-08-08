@@ -5,11 +5,11 @@ import "./NoDeviceWarning.scss";
 export default function NoDeviceWarning({ noDeviceWarning }) {
   const [toggled] = useState(noDeviceWarning);
 
-  console.log(
-    "%c no preview warning",
-    "background: #000; color: red; font-size: 24px;",
-    noDeviceWarning
-  );
+  // console.log(
+  //   "%c no preview warning",
+  //   "background: #000; color: red; font-size: 24px;",
+  //   noDeviceWarning
+  // );
 
   const transition = useTransition(toggled, null, {
     from: { top: -200 },
@@ -20,7 +20,7 @@ export default function NoDeviceWarning({ noDeviceWarning }) {
   return transition.map(
     ({ item, key, props }) =>
       item && (
-        <animated.div key={key} style={props} id="no-preview-warning">
+        <animated.div key={key} style={props} id="no-device-warning">
           <span className="warning-top-line">Sorry.</span>
           <span className="warning-body">
             It looks like there isn't an active audio device. Click{" "}
@@ -31,7 +31,8 @@ export default function NoDeviceWarning({ noDeviceWarning }) {
             >
               here
             </a>{" "}
-            to open up a player, or open Spotify on your phone or TV.
+            to open up a player, or open Spotify on your phone or TV. Refresh
+            the page when you're done.
           </span>
         </animated.div>
       )

@@ -4,19 +4,18 @@ import { userContext } from "../../UserProvider";
 import { cancelAudioContext } from "../../App";
 import NavButton from "./NavButton/NavButton";
 import ProfileChip from "./ProfileChip/ProfileChip";
-//import TindifyPlaylist from "../../Routes/TindifyPlaylist/TindifyPlaylist";
 import { useScrollPosition } from "../../utils/useScrollPosition";
+import { ReactComponent as Search } from "../Images/search.svg";
+import { ReactComponent as Library } from "../Images/library.svg";
 import "./ApplicationHeader.scss";
-//import { constSelector } from "recoil";
 
 export default function ApplicationHeader() {
   const { userInfo } = useContext(userContext);
-  //const [displayPlaylist, setDisplayPlaylist] = useState(false);
 
   const [headerHasBackground, setHeaderHasBackground] = useState(false);
 
   useScrollPosition(
-    ({ prevPos, currPos }) => {
+    ({ currPos }) => {
       const scrolledToTop = currPos.y === 0;
       scrolledToTop
         ? setHeaderHasBackground(false)
@@ -33,27 +32,23 @@ export default function ApplicationHeader() {
       <nav id="button-container">
         <NavButton direction={"back"} />
         <NavButton direction={"forward"} />
-        <NavChip children={"Browse"} path={"/browse"} />
-        <NavChip children={"My Tindify"} path={"/mytindify"} />
-        {/*<TindifyNavChip
-          displayPlaylist={displayPlaylist}
-          setDisplayPlaylist={setDisplayPlaylist}
-        >
-          {"My Tindify"}
-          {!!displayPlaylist && (
-            <TindifyPlaylist
-              displayPlaylist={displayPlaylist}
-              setDisplayPlaylist={setDisplayPlaylist}
-            />
-          )}
-          </TindifyNavChip>*/}
+        <NavChip
+          text={"Browse"}
+          path={"/browse"}
+          icon={<Search className="icon" />}
+        />
+        <NavChip
+          text={"My Tindify"}
+          path={"/mytindify"}
+          icon={<Library className="icon" />}
+        />
       </nav>
       <ProfileChip profileInfo={userInfo} />
     </header>
   );
 }
 
-function NavChip({ children, path }) {
+function NavChip({ text, path, icon }) {
   const { spotify, userInfo, userToken, previewAudio } = useContext(
     userContext
   );
@@ -82,19 +77,8 @@ function NavChip({ children, path }) {
         }
       }}
     >
-      {children}
+      {icon}
+      {text}
     </Link>
   );
 }
-
-// function TindifyNavChip({ children, displayPlaylist, setDisplayPlaylist }) {
-//   return (
-//     <button
-//       className={`nav-chip ${displayPlaylist ? "active" : ""}`}
-//       onClick={() => setDisplayPlaylist(true)}
-//       //onBlur={() => setDisplayPlaylist(false)}
-//     >
-//       {children}
-//     </button>
-//   );
-// }

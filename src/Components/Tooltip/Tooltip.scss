@@ -1,0 +1,19 @@
+.tooltip {
+  background-color: white;
+  font-size: 12px;
+  color: black;
+  visibility: hidden;
+  display: flex;
+  position: absolute;
+  padding: 2px;
+
+  &.visible {
+    visibility: visible;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .tooltip {
+    display: none;
+  }
+}

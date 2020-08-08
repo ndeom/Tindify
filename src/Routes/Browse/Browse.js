@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
+import useTooltip from "../../utils/useTooltip";
+import Tooltip from "../../Components/Tooltip/Tooltip";
 import Category from "../../Components/Category/Category";
 import Loading from "../../Components/Loading/Loading";
 import RouteHeader from "../../Components/RouteHeader/RouteHeader";
@@ -13,7 +15,14 @@ export default function Browse(props) {
     userContext
   );
 
-  const history = useHistory();
+  //const history = useHistory();
+
+  const {
+    tooltipPosition,
+    tooltipBody,
+    getTooltipMouseProps,
+    showTooltip,
+  } = useTooltip();
 
   useEffect(() => {
     const currentDate = new Date();
@@ -24,18 +33,21 @@ export default function Browse(props) {
       spotify
         .getCategories({ limit: 50 })
         .then((categories) => {
-          setLoading(false);
+          //setLoading(false);
           setCategories(categories.categories);
         })
         .catch((err) => {
+          setLoading(false);
           if (err) return console.error("Error loading categories!", err);
         });
     }
 
+    if (Object.keys(categories).length && loading) setLoading(false);
+
     if (needNewToken) {
       getNewToken();
     }
-  });
+  }, [categories, getNewToken, loading, spotify, tokenTimeout, userToken]);
 
   return (
     <div className="browse">
@@ -44,11 +56,20 @@ export default function Browse(props) {
         <div className="categories">
           {!!Object.keys(categories).length &&
             categories.items.map((category, i) => (
-              <Category key={`cat-${i}`} info={category} history={history} />
+              <Category
+                key={`cat-${i}`}
+                info={category}
+                getTooltipMouseProps={getTooltipMouseProps}
+              />
             ))}
           {loading && <Loading />}
         </div>
       </section>
+      <Tooltip
+        position={tooltipPosition.current}
+        visible={showTooltip}
+        body={tooltipBody.current}
+      />
     </div>
   );
 }
