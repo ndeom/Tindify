@@ -50,9 +50,7 @@ export default function Card({
   const [trackLength] = useState(
     track.track !== null ? track.track.duration_ms : 0
   );
-  const [primaryColor] = useState(
-    track.track !== null ? track.primary_color : "#282828"
-  );
+  const [primaryColor] = useState(track.primary_color || "#282828");
   const [albumArtArray] = useState(
     track.track !== null ? track.track.album.images : []
   );

@@ -91,10 +91,10 @@ export default function UserProvider(props) {
       history.push("/");
     }
 
-    if (!userToken && token === null) {
-      console.error("Error getting access token! Redirected to login.");
-      history.push("/login");
-    }
+    // if (!userToken && token === null) {
+    //   console.error("Error getting access token! Redirected to login.");
+    //   history.push("/login");
+    // }
   }, [
     history,
     refresh,
