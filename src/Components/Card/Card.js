@@ -39,26 +39,26 @@ export default function Card({
   console.log("track", track);
   console.log("track.track", track.track);
 
-  //Check added due to some tracks missing "artist" field
+  //Check had to be added due to some results not containing track data
   const [artists] = useState(
-    track &&
-      track.track &&
-      track.track.artists.map((artist) => artist.name).join(", ")
+    track.track
+      ? track.track.artists.map((artist) => artist.name).join(", ")
+      : ""
   );
 
-  const [song] = useState(track.track.name || "");
-  const [trackLength] = useState(track.track.duration_ms);
+  const [song] = useState(track.track ? track.track.track.name : "");
+  const [trackLength] = useState(track.track ? track.track.duration_ms : 0);
   const [primaryColor] = useState(track.primary_color || "#282828");
-  const [albumArtArray] = useState(track.track.album.images);
-  const [album] = useState(track.track.album.name);
-  const [uri] = useState(track.track.uri);
+  const [albumArtArray] = useState(track.track ? track.track.album.images : []);
+  const [album] = useState(track.track ? track.track.album.name : "");
+  const [uri] = useState(track.track ? track.track.uri : "");
 
   const playbackState = useRef({
     elapsed: 0,
     remaining: hasPremium ? trackLength : 30000,
   });
 
-  const [hasPreview] = useState(track.track.preview_url || null);
+  const [hasPreview] = useState(track.track ? track.track.preview_url : "");
   const [previewLoading, setPreviewLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [songStarted, setSongStarted] = useState(false);
