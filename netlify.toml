@@ -1,6 +1,5 @@
 #redirects
 [[redirects]]
 from = "/*"
-to = "/build/static/index.html"
+to = "/index.html"
 status = 200
-force = true
