@@ -58,7 +58,7 @@ app.get("/api/login", function (req, res) {
   );
 });
 
-app.get("/api/callback", function (req, res) {
+app.get("/callback/api", function (req, res) {
   const code = req.query.code || null;
   const state = req.query.state || null;
   const storedState = req.cookies ? req.cookies[stateKey] : null;
