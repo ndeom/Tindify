@@ -9,6 +9,7 @@ import NoDeviceWarning from "../../Components/NoDeviceWarning/NoDeviceWarning";
 import { userContext } from "../../UserProvider";
 import { cancelAudioContext } from "../../App";
 import "./Swipe.scss";
+import { findAllInRenderedTree } from "react-dom/test-utils";
 
 export default function Swipe() {
   const [currentTracks, setCurrentTracks] = useState([]);
@@ -41,7 +42,13 @@ export default function Swipe() {
         .getPlaylistTracks(playlistId)
         .then((tracks) => {
           //console.log("Tracks", tracks);
-          setCurrentTracks(tracks.items);
+
+          //Added due to some song objects not containing track data
+          const filteredTracks = tracks.items.filter(
+            (track) => track.track !== null
+          );
+          //console.log("filtered Tracks: ", filteredTracks);
+          setCurrentTracks(filteredTracks);
         })
         .catch((err) => console.error("Error getting playlist tracks!", err));
     }

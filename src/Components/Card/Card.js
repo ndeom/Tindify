@@ -36,35 +36,24 @@ export default function Card({
 
   const [hasPremium] = useState(userInfo.product === "premium");
 
-  console.log("track", track);
-  console.log("track.track", track.track);
-
   //Check had to be added due to some results not containing track data
   const [artists] = useState(
-    track.track !== null
-      ? track.track.artists.map((artist) => artist.name).join(", ")
-      : ""
+    track.track.artists.map((artist) => artist.name).join(", ")
   );
 
-  const [song] = useState(track.track !== null ? track.track.track.name : "");
-  const [trackLength] = useState(
-    track.track !== null ? track.track.duration_ms : 0
-  );
+  const [song] = useState(track.track.name || "");
+  const [trackLength] = useState(track.track.duration_ms || 0);
   const [primaryColor] = useState(track.primary_color || "#282828");
-  const [albumArtArray] = useState(
-    track.track !== null ? track.track.album.images : []
-  );
-  const [album] = useState(track.track !== null ? track.track.album.name : "");
-  const [uri] = useState(track.track !== null ? track.track.uri : "");
+  const [albumArtArray] = useState(track.track.album.images || []);
+  const [album] = useState(track.track.album.name || "");
+  const [uri] = useState(track.track.uri || "");
 
   const playbackState = useRef({
     elapsed: 0,
     remaining: hasPremium ? trackLength : 30000,
   });
 
-  const [hasPreview] = useState(
-    track.track !== null ? track.track.preview_url : ""
-  );
+  const [hasPreview] = useState(track.track.preview_url || "");
   const [previewLoading, setPreviewLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [songStarted, setSongStarted] = useState(false);
@@ -134,6 +123,9 @@ export default function Card({
     setNoPreviewWarning,
     songStarted,
   ]);
+
+  const [prevPromise, setPrevPromise] = useState(null);
+  //const [availableDevices, setAvailableDevices] = useState([])
 
   //Handles playback for premium users
   useEffect(() => {

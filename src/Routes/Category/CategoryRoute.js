@@ -77,7 +77,8 @@ export default function CategoryRoute(props) {
   useScrollPosition(({ currPos }) => {
     const documentHeight = document.body.clientHeight;
     const scrolledToBottom =
-      -1 * currPos.y + window.innerHeight === documentHeight;
+      -1 * currPos.y + window.innerHeight >= documentHeight - 164;
+    console.log("scrolledToBottom: ", scrolledToBottom);
     if (scrolledToBottom && morePlaylists) {
       const spotify = new SpotifyWebApi();
       spotify.setAccessToken(userToken);

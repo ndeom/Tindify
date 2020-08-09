@@ -105,3 +105,36 @@ $green-dark-back: #1db954;
     }
   }
 }
+
+@media only screen and (max-height: 700px) {
+  #swipe {
+    #swipe-container {
+      #card-container {
+        & > .deck-container {
+          top: 0;
+        }
+
+        #swipe-back-button {
+          border: none;
+          outline: none;
+          font-family: "Nunito Sans", sans-serif;
+          font-size: 16px;
+          font-weight: 500;
+          width: 240px;
+          height: 67px;
+          background-color: white;
+          border-radius: 999px;
+          padding: 8px;
+          cursor: pointer;
+          transition: transform 150ms ease, font-weight 150ms ease;
+          //margin-top: 200px;
+
+          &:hover {
+            transform: scale(1.1);
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+}
