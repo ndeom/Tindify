@@ -201,7 +201,12 @@ export default function Card({
         children={album}
         zIndex={zIndex}
       />
-      <img className="album-art" alt="Album Art" src={albumArtArray[1].url} />
+      <img
+        className="album-art noselect"
+        draggable="false"
+        alt="Album Art"
+        src={albumArtArray[1].url}
+      />
       <FadedEdges
         containerClass={"track"}
         primaryColor={primaryColor}
@@ -297,7 +302,7 @@ function FadedEdges({ containerClass, children, primaryColor }) {
               id={`span-${randomId}`}
               className={`${containerClass}-span ${
                 scrollable ? "scrollable" : ""
-              }`}
+              } noselect`}
             >
               {children}
             </span>
@@ -306,7 +311,9 @@ function FadedEdges({ containerClass, children, primaryColor }) {
       ) : (
         <span
           id={`span-${randomId}`}
-          className={`${containerClass}-span ${scrollable ? "scrollable" : ""}`}
+          className={`${containerClass}-span ${
+            scrollable ? "scrollable" : ""
+          } noselect`}
         >
           {children}
         </span>

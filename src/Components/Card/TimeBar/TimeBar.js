@@ -134,8 +134,8 @@ export default function TimeBar({
           }}
         ></div>
       </div>
-      <div className="elapsed-time">{formatMsToMin(time.elapsed)}</div>
-      <div className="remaining-time">{`-${formatMsToMin(
+      <div className="elapsed-time noselect">{formatMsToMin(time.elapsed)}</div>
+      <div className="remaining-time noselect">{`-${formatMsToMin(
         time.remaining
       )}`}</div>
     </div>

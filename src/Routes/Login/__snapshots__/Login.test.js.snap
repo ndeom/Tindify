@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match the snapshot 1`] = `
+<div
+  data-testid="login"
+  id="login"
+>
+  <h1
+    data-testid="login-title"
+  >
+    Tindify
+  </h1>
+  <a
+    data-testid="login-button"
+    href="https://tindify-web.herokuapp.com/api/login"
+  >
+     
+    Sign in with Spotify
+     
+  </a>
+</div>
+`;
