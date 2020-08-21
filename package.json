@@ -3,44 +3,37 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
+    "@testing-library/jest-dom": "^5.11.3",
+    "@testing-library/react": "^10.4.8",
+    "@testing-library/user-event": "^12.1.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.3",
-    "enzyme-to-json": "^3.5.0",
     "express": "^4.17.1",
     "express-favicon": "^2.0.1",
     "querystring": "^0.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^3.4.3",
     "react-spring": "^8.0.27",
     "react-test-renderer": "^16.13.1",
     "react-use-gesture": "^7.0.15",
     "recoil": "0.0.10",
     "request": "^2.88.2",
     "sass": "^1.26.10",
-    "spotify-web-api-js": "^1.4.0"
+    "spotify-web-api-js": "^1.5.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "CI= react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jest-environment-jsdom-fourteen",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "jest": {
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ]
-  },
+  "jest": {},
   "browserslist": {
     "production": [
       ">0.2%",

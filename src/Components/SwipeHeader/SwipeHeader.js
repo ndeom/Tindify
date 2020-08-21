@@ -9,9 +9,10 @@ export default function SwipeHeader(props) {
     <header
       style={{ backgroundColor: primaryColors[0] }}
       className="swipe-header"
+      data-testid="swipe-header"
     >
       <div className="header-gradient">
-        <h1>{props.title}</h1>
+        <h1 data-testid="swipe-header-title">{props.title}</h1>
       </div>
     </header>
   );

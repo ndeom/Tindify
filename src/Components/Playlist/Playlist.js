@@ -17,9 +17,15 @@ export default function Playlist({ currCategory, info, getTooltipMouseProps }) {
         },
       }}
       className="playlist"
+      data-testid="playlist"
       {...getTooltipMouseProps({ displayedText: playlistTitle })}
     >
-      <img className="playlist-image" alt="Playlist" src={`${images[0].url}`} />
+      <img
+        className="playlist-image"
+        data-testid="playlist-image"
+        alt="Playlist"
+        src={`${images[0].url}`}
+      />
     </Link>
   );
 }

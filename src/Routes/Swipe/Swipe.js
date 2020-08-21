@@ -9,7 +9,6 @@ import NoDeviceWarning from "../../Components/NoDeviceWarning/NoDeviceWarning";
 import { userContext } from "../../UserProvider";
 import { cancelAudioContext } from "../../App";
 import "./Swipe.scss";
-import { findAllInRenderedTree } from "react-dom/test-utils";
 
 export default function Swipe() {
   const [currentTracks, setCurrentTracks] = useState([]);
@@ -41,13 +40,11 @@ export default function Swipe() {
       spotify
         .getPlaylistTracks(playlistId)
         .then((tracks) => {
-          //console.log("Tracks", tracks);
-
           //Added due to some song objects not containing track data
           const filteredTracks = tracks.items.filter(
             (track) => track.track !== null
           );
-          //console.log("filtered Tracks: ", filteredTracks);
+
           setCurrentTracks(filteredTracks);
         })
         .catch((err) => console.error("Error getting playlist tracks!", err));
@@ -59,7 +56,7 @@ export default function Swipe() {
   });
 
   return (
-    <div id="swipe">
+    <div id="swipe" data-testid="swipe">
       <SwipeHeader title={playlistTitle} />
       <div id="swipe-container">
         <SwipeGradient />

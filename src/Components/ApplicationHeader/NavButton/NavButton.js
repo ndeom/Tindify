@@ -4,7 +4,7 @@ import { userContext } from "../../../UserProvider";
 import { cancelAudioContext } from "../../../App";
 import "./NavButton.scss";
 
-export default function NavButton({ direction }) {
+export default function NavButton({ direction, testid }) {
   const { previewAudio, userToken, userInfo, spotify } = useContext(
     userContext
   );
@@ -14,6 +14,7 @@ export default function NavButton({ direction }) {
   return (
     <button
       className={`nav-button ${direction}`}
+      data-testid={testid}
       onClick={() => {
         if (activeAudio) {
           const hasPremium = userInfo.product === "premium";

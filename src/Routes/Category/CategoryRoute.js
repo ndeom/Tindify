@@ -39,7 +39,7 @@ export default function CategoryRoute(props) {
       spotify
         .getCategoryPlaylists(currCategory, { limit: 50 })
         .then(({ playlists }) => {
-          //console.log("playlists", playlists);
+          // console.log("playlists", playlists);
 
           if (playlists.items.length) {
             setCurrentPlaylists(playlists.items);
@@ -55,6 +55,7 @@ export default function CategoryRoute(props) {
         })
         .catch((err) => {
           setLoading(false);
+          setReturnedNoPlaylists(true);
           console.error("Error getting category playlists!", err);
         });
     }
@@ -104,7 +105,7 @@ export default function CategoryRoute(props) {
   //console.log("location: ", location);
 
   return (
-    <div id="category-route">
+    <div id="category-route" data-testid="category-route">
       <RouteHeader title={location && location.state.categoryTitle} />
       <section className="playlist-section" aria-label="Browse playlists">
         <div id="playlists">

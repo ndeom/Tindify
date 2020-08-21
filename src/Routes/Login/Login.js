@@ -12,7 +12,10 @@ export default function Login() {
         {" "}
         Sign in with Spotify{" "}
       </a>
-      {/* <a href="http://localhost:8080/api/login"> Sign in with Spotify </a> */}
+      {/* <a data-testid="login-button" href="http://localhost:8080/api/login">
+        {" "}
+        Sign in with Spotify{" "}
+      </a> */}
     </div>
   );
 }

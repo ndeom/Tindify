@@ -29,16 +29,18 @@ export default function Browse(props) {
     const needNewToken = tokenTimeout < currentDate.getTime();
     if (!Object.keys(categories).length && !needNewToken) {
       setLoading(true);
+      // console.log("spotify.getCategories", spotify.getCategories);
       spotify.setAccessToken(userToken);
       spotify
         .getCategories({ limit: 50 })
         .then((categories) => {
-          //setLoading(false);
+          setLoading(false);
+
           setCategories(categories.categories);
         })
         .catch((err) => {
           setLoading(false);
-          if (err) return console.error("Error loading categories!", err);
+          console.error("Error loading categories!", err);
         });
     }
 
@@ -50,7 +52,7 @@ export default function Browse(props) {
   }, [categories, getNewToken, loading, spotify, tokenTimeout, userToken]);
 
   return (
-    <div className="browse">
+    <div className="browse" data-testid="browse">
       <RouteHeader title={"Browse"} />
       <section className="category-section" aria-label="Browse categories">
         <div className="categories">

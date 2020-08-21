@@ -227,6 +227,7 @@ export default function Deck({
         return (
           <animated.div
             className="deck-container"
+            data-testid="deck-container"
             key={index}
             style={{
               //Added to correct stacking order of cards
@@ -270,6 +271,7 @@ export default function Deck({
         return (
           <animated.div
             className="deck-container"
+            data-testid="deck-container"
             key={index}
             style={{
               //Added to correct stacking order of cards

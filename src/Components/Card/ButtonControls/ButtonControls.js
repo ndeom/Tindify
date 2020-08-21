@@ -57,6 +57,7 @@ export default function ButtonControls({
     <div id="button-controls">
       <button
         id="dislike"
+        data-testid="dislike-button"
         onClick={() => {
           gone.add(i);
           handleLikeOrDislike(-1);
@@ -76,6 +77,7 @@ export default function ButtonControls({
       </button>
       <button
         id="like"
+        data-testid="like-button"
         onClick={() => {
           gone.add(i);
           handleLikeOrDislike(1);

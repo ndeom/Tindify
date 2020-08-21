@@ -8,7 +8,8 @@ import React, {
 import { userContext } from "../../UserProvider";
 import { cancelAudioContext } from "../../App";
 import { animated } from "react-spring";
-import { Keyframes } from "react-spring/renderprops";
+//renderprops.cjs.js used due to Jest incompatibility with renderprops.js
+import { Keyframes } from "react-spring/renderprops.cjs.js";
 import hexToRgba from "../../utils/hexToRgba";
 import TimeBar from "./TimeBar/TimeBar";
 import ButtonControls from "./ButtonControls/ButtonControls";
@@ -141,6 +142,7 @@ export default function Card({
         //console.log("Checking for active devices");
 
         const devices = await spotify.getMyDevices();
+        // console.log("devices: ", devices);
         return devices;
       } catch (error) {
         console.error("Error getting user devices!", error);
@@ -190,7 +192,12 @@ export default function Card({
   ]);
 
   return (
-    <animated.div {...bind(i)} style={{ ...styles }} className="card">
+    <animated.div
+      {...bind(i)}
+      style={{ ...styles }}
+      className="card"
+      data-testid="card"
+    >
       <div
         className="background-color"
         style={{ backgroundColor: primaryColor }}
@@ -286,7 +293,10 @@ function FadedEdges({ containerClass, children, primaryColor }) {
   }, []);
 
   return (
-    <div className={`${containerClass} ${scrollable ? "scrollable" : ""}`}>
+    <div
+      className={`${containerClass} ${scrollable ? "scrollable" : ""}`}
+      data-testid={containerClass}
+    >
       <span
         className="left-gradient"
         style={{
@@ -303,6 +313,7 @@ function FadedEdges({ containerClass, children, primaryColor }) {
               className={`${containerClass}-span ${
                 scrollable ? "scrollable" : ""
               } noselect`}
+              data-testid={`${containerClass}-text`}
             >
               {children}
             </span>
@@ -314,6 +325,7 @@ function FadedEdges({ containerClass, children, primaryColor }) {
           className={`${containerClass}-span ${
             scrollable ? "scrollable" : ""
           } noselect`}
+          data-testid={`${containerClass}-text`}
         >
           {children}
         </span>

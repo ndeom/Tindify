@@ -14,8 +14,7 @@ import "./App.scss";
 
 export const cancelAudioContext = React.createContext({});
 
-function App() {
-  const { userToken } = useContext(userContext);
+export function CancelAudioProvider({ children }) {
   const [cancelAudio, setCancelAudio] = useState(false);
   const [activeAudio, setActiveAudio] = useState(false);
 
@@ -28,6 +27,15 @@ function App() {
         setActiveAudio,
       }}
     >
+      {children}
+    </cancelAudioContext.Provider>
+  );
+}
+
+export default function App() {
+  const { userToken } = useContext(userContext);
+  return (
+    <div id="app" data-testid="app">
       <Switch>
         <Route exact path="/">
           {userToken ? <Redirect to="/browse" /> : <Redirect to="/login" />}
@@ -36,37 +44,59 @@ function App() {
           <Login />
         </Route>
         <Route path="/browse">
-          <ScrollToTop />
-          <ApplicationHeader />
-          <Browse />
-          <MobileFooter />
+          {userToken || localStorage.getItem("userTokenKey") ? (
+            <>
+              <ScrollToTop />
+              <ApplicationHeader />
+              <Browse />
+              <MobileFooter />
+            </>
+          ) : (
+            <Redirect to="/login" />
+          )}
         </Route>
         <Route path="/mytindify">
-          <ScrollToTop />
-          <ApplicationHeader />
-          <TindifyPlaylist />
-          <MobileFooter />
+          {userToken || localStorage.getItem("userTokenKey") ? (
+            <>
+              <ScrollToTop />
+              <ApplicationHeader />
+              <TindifyPlaylist />
+              <MobileFooter />
+            </>
+          ) : (
+            <Redirect to="/login" />
+          )}
         </Route>
         <Route path="/:category/swipe/:playlist">
-          <ScrollToTop />
-          <ApplicationHeader />
-          <RecoilRoot>
-            <Swipe />
-          </RecoilRoot>
-          <MobileFooter />
+          {userToken || localStorage.getItem("userTokenKey") ? (
+            <>
+              <ScrollToTop />
+              <ApplicationHeader />
+              <RecoilRoot>
+                <Swipe />
+              </RecoilRoot>
+              <MobileFooter />
+            </>
+          ) : (
+            <Redirect to="/login" />
+          )}
         </Route>
         <Route path="/:category">
-          <ScrollToTop />
-          <ApplicationHeader />
-          <CategoryRoute />
-          <MobileFooter />
+          {userToken || localStorage.getItem("userTokenKey") ? (
+            <>
+              <ScrollToTop />
+              <ApplicationHeader />
+              <CategoryRoute />
+              <MobileFooter />
+            </>
+          ) : (
+            <Redirect to="/login" />
+          )}
         </Route>
       </Switch>
-    </cancelAudioContext.Provider>
+    </div>
   );
 }
-
-export default App;
 
 function ScrollToTop() {
   const { pathname } = useLocation();

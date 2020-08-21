@@ -65,6 +65,7 @@ export default function TindifyPlaylist() {
         [moreIndex],
         playlistSnapshot
       );
+      // console.log("newSnapshot: ", newSnapshot);
       setPlaylistSnapshot(newSnapshot.snapshot_id);
     } catch (error) {
       console.error("Error removing track from Tindify playlist!", error);
@@ -88,6 +89,7 @@ export default function TindifyPlaylist() {
       spotify
         .getUserPlaylists(userInfo.id)
         .then(({ items: userPlaylists }) => {
+          // console.log(userPlaylists);
           const tindify = userPlaylists.filter(
             (playlist) => playlist.name === "Tindify"
           )[0];
@@ -139,12 +141,17 @@ export default function TindifyPlaylist() {
   ]);
 
   return (
-    <div id="tindify-playlist-container" ref={clickRef}>
-      <div id="tindify-header">
+    <div
+      id="tindify-playlist-container"
+      data-testid="tindify-playlist-container"
+      ref={clickRef}
+    >
+      <div id="tindify-header" data-testid="tindify-header">
         <div id="playlist-cover">
           {playlistCover ? (
             <img
               id="playlist-cover-image"
+              data-testid="playlist-cover-image"
               alt="Tindify Playlist Cover"
               src={playlistCover}
             ></img>
@@ -152,7 +159,7 @@ export default function TindifyPlaylist() {
             <BeamNote id="beam-note" />
           )}
         </div>
-        <h1>Tindify</h1>
+        <h1 data-testid="tindify-header-text">Tindify</h1>
       </div>
       <div id="tindify-playlist">
         <ul>
@@ -218,9 +225,10 @@ function PlaylistRow({
   const artists = song.track.artists.map((artist) => artist.name).join(", ");
 
   return (
-    <li className="playlist-row">
+    <li className="playlist-row" data-testid="playlist-row">
       <span
         className="playlist-song-title"
+        data-testid="playlist-song-title"
         {...getTooltipMouseProps({
           displayedText: song.track.name,
         })}
@@ -229,6 +237,7 @@ function PlaylistRow({
       </span>
       <span
         className="playlist-artist"
+        data-testid="playlist-artist"
         {...getTooltipMouseProps({
           displayedText: artists,
         })}
@@ -237,6 +246,7 @@ function PlaylistRow({
       </span>
       <span
         className="playlist-album"
+        data-testid="playlist-album"
         {...getTooltipMouseProps({
           displayedText: song.track.album.name,
         })}

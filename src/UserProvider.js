@@ -7,7 +7,7 @@ import getHashParams from "./utils/getHashParams";
 
 export const userContext = React.createContext("");
 
-export default function UserProvider(props) {
+export default function UserProvider({ children }) {
   let userTokenKey, userInfoKey, refreshTokenKey, tokenTimeoutKey;
   const [userToken, setUserToken] = usePersistedState(userTokenKey, "");
   const [userInfo, setUserInfo] = usePersistedState(userInfoKey, {});
@@ -28,6 +28,10 @@ export default function UserProvider(props) {
   const params = getHashParams();
   const [token, setToken] = useState(params.access_token || null);
   const [refresh, setRefresh] = useState(params.refresh_token || null);
+  // console.log("Window.location: ", window.history);
+  // console.log("PARAMS IN USERPROVIDER: ", params);
+  // console.log("Token inside UserProvider: ", token);
+  // console.log("Refresh Token inside UserProvider", refresh);
 
   const history = useHistory();
 
@@ -85,6 +89,7 @@ export default function UserProvider(props) {
 
       spotify.setAccessToken(token);
       spotify.getMe().then((user) => {
+        // console.log("User info: ", user);
         setUserInfo(user);
         localStorage.setItem("userInfoKey", JSON.stringify(user));
       });
@@ -119,7 +124,7 @@ export default function UserProvider(props) {
         previewAudio,
       }}
     >
-      {props.children}
+      {children}
     </userContext.Provider>
   );
 }

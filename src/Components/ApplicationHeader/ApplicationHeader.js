@@ -28,16 +28,19 @@ export default function ApplicationHeader() {
     <header
       id="application-header"
       className={`${headerHasBackground ? "filled" : ""}`}
+      data-testid="application-header"
     >
       <nav id="button-container">
-        <NavButton direction={"back"} />
-        <NavButton direction={"forward"} />
+        <NavButton direction={"back"} testid={"back-navbutton"} />
+        <NavButton direction={"forward"} testid={"forward-navbutton"} />
         <NavChip
+          testid={"browse-navchip"}
           text={"Browse"}
           path={"/browse"}
           icon={<Search className="icon" />}
         />
         <NavChip
+          testid={"mytindify-navchip"}
           text={"My Tindify"}
           path={"/mytindify"}
           icon={<Library className="icon" />}
@@ -48,7 +51,7 @@ export default function ApplicationHeader() {
   );
 }
 
-function NavChip({ text, path, icon }) {
+function NavChip({ text, path, icon, testid }) {
   const { spotify, userInfo, userToken, previewAudio } = useContext(
     userContext
   );
@@ -60,6 +63,7 @@ function NavChip({ text, path, icon }) {
     <Link
       to={{ pathname: path }}
       className={`nav-chip ${currentPath ? "active" : ""}`}
+      data-testid={testid}
       onClick={() => {
         if (activeAudio) {
           const hasPremium = userInfo.product === "premium";

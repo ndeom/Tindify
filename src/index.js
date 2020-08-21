@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import UserProvider from "./UserProvider";
+import { CancelAudioProvider } from "./App";
 import "./index.scss";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
@@ -10,7 +11,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <UserProvider>
-        <App />
+        <CancelAudioProvider>
+          <App />
+        </CancelAudioProvider>
       </UserProvider>
     </Router>
   </React.StrictMode>,

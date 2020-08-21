@@ -12,6 +12,7 @@ export default function ProfileChip(props) {
   return (
     <button
       id="profile-chip"
+      data-testid="profile-chip"
       className={`${isToggled ? "active" : ""}`}
       onClick={() => setIsToggled(!isToggled)}
       onBlur={() => setIsToggled(false)}
@@ -45,6 +46,7 @@ function ToggleDropdown() {
   return (
     <ul
       id="drop-down-menu"
+      data-testid="drop-down-menu"
       onClick={() => {
         logoutUser();
       }}

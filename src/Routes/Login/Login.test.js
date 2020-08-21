@@ -1,19 +1,21 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import TestRenderer from "react-test-renderer";
 import Login from "./Login";
 
-it("should contain an h1 element and an anchor button", () => {
-  const { getByTestId } = render(<Login />);
+/**
+ * Test that the login route contains a title and a button
+ */
 
-  expect(getByTestId("login-title")).toBeInTheDocument();
-  expect(getByTestId("login-title")).toHaveTextContent("Tindify");
+describe("<Login /> route", () => {
+  test("should contain an h1 element and an anchor button", () => {
+    const { getByTestId } = render(<Login />);
 
-  expect(getByTestId("login-button")).toBeInTheDocument();
-  expect(getByTestId("login-button")).toHaveTextContent("Sign in with Spotify");
-});
+    expect(getByTestId("login-title")).toBeInTheDocument();
+    expect(getByTestId("login-title")).toHaveTextContent("Tindify");
 
-it("should match the snapshot", () => {
-  const tree = TestRenderer.create(<Login />);
-  expect(tree).toMatchSnapshot();
+    expect(getByTestId("login-button")).toBeInTheDocument();
+    expect(getByTestId("login-button")).toHaveTextContent(
+      "Sign in with Spotify"
+    );
+  });
 });

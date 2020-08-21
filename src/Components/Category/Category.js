@@ -23,6 +23,7 @@ export default function Category({ info, getTooltipMouseProps }) {
         },
       }}
       className="category"
+      data-testid="category"
       style={{ backgroundColor: categoryColor }}
       {...getTooltipMouseProps({ displayedText: categoryTitle })}
     >
@@ -30,6 +31,7 @@ export default function Category({ info, getTooltipMouseProps }) {
         <h3 className="category-title">{`${breakAtSlash(categoryTitle)}`}</h3>
         <img
           className="category-image"
+          data-testid="category-image"
           alt="Category"
           src={`${info.icons[0].url}`}
         />
